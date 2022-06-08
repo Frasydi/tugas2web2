@@ -1,7 +1,7 @@
 const HTTP = require('http')
 const url = require("url")
 const Anggota = require("./anggota.js")
-const port = 3000
+const port = process.env.PORT||3000
 
 HTTP.createServer(function(req,res) {
     const {pathname, query} = url.parse(req.url, true)
