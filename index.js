@@ -56,7 +56,9 @@ HTTP.createServer(function(req,res) {
         res.write(`
         <button onclick="window.location.href='/kelompok'">Kembali</button>
         <div class="gambar" onmouseenter="this.style.cursor = 'pointer';children[1].style.transform = 'translateY(0%)';this.style.transform = 'scale(105%)'" onmouseleave="children[1].style.transform = 'translateY(200%)';this.style.transform = 'scale(100%)'" style="border-radius:20%;position:relative;margin : auto;width:400px;height:400px;transition: all 0.4s ease;overflow:hidden;">
-            <img  onclick="window.location.href = '${foto}' " width="400" height="400" src="${foto}" alt="${foto}"  />
+            
+        <img  onclick="window.location.href = '${foto}' " width="400" height="400" src="${foto}" alt="${foto}"  />
+
             <h2 style="color:${color};transition: all 0.4s ease;text-align:center;position:absolute;bottom:-5%;transform:translateY(200%);width:100%;height:5rem;background-color:${backcolor}">${nama}</h2>
         </div>
         `)       
