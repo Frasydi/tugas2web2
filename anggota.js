@@ -40,4 +40,5 @@ const Anggota = {
     }
 }
 
+
 module.exports =  Anggota

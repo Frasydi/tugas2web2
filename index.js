@@ -61,7 +61,8 @@ HTTP.createServer(function(req,res) {
 
             <h2 style="color:${color};transition: all 0.4s ease;text-align:center;position:absolute;bottom:-5%;transform:translateY(200%);width:100%;height:5rem;background-color:${backcolor}">${nama}</h2>
         </div>
-        `)       
+        `)
+               
         res.end() 
     } else {
         res.writeHead(404, {
