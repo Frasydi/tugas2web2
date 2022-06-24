@@ -8,7 +8,7 @@ const client = new MongoClient(uri, {
 }) 
 
 async function main(nim, next) {
-    client.db('web').collection('mahasiswa').findOne({nim:nim}, (err, res) => {
+    client.db('web').collection(collection).findOne({nim:nim}, (err, res) => {
         if(err) throw err
         next(res)
     })
