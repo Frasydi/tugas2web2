@@ -32,7 +32,7 @@ HTTP.createServer(async function(req,res) {
             dat.forEach(el => {
                 res.write(`<div class="li"> <a style="color:black;text-decoration:none;" onmouseenter="this.style.color = 'blue'" onmouseleave="this.style.color = 'black'" href='/mahasiswa?nim=${el.nim}&color=black&backcolor=cyan'>${el.nama}</a></div class="li">`)
             })
-        })
+        }).catch(console.log("Err"))
         res.write("</h4>")
         res.end()
     } else if( pathname == "/mahasiswa") {
