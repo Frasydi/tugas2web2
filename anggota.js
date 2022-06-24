@@ -1,44 +1,15 @@
-const Anggota = {
-    data : [
-        {
-            "nama" : "Ikbal",
-            "nim" : "105841103620"
-            
-        },
-        {
-            "nama" : "Nurul Aulia Muslimah",
-            "nim" : "105841103920"
-        },
-        
-        {
-            "nama" : "Putri Nirmanda",
-            "nim" : "105841104520"
-                },
-        {
-            "nama" : "Fitra M. Natsir",
-            "nim" : "105841105420"
-        },
-        {
-            "nama" : "Ikhlasul Amal",
-            "nim" : "105841105220"
-            
-        },
-        {
-            "nama" : "Azhil Syah Fahlevi",
-            "nim" : "105841105820"
-            
-        },
-        {
-            "nama" : "Muhammad Fachri Rasyidi",
-            "nim" : "105841106320"
-            
-        },
-        
-    ],
-    get all() {
-        return this.data
-    }
+const {MongoClient} = require('mongodb')
+const client = new MongoClient('mongodb+srv://Fachri:Shirochan@cluster0.r84gb.mongodb.net/test', {
+    useNewUrlParser : true,
+    useUnifiedTopology : true
+})
+
+const getAll = async() => {
+    const hasil = []
+    await client.db('Tugas').collection('Web2').find({}).forEach(el => {
+        hasil.push(el)
+    })
+    console.log(hasil)
+    return hasil
 }
-
-
-module.exports =  Anggota
+exports.getAll = getAll

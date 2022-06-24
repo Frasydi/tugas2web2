@@ -4,10 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start" : "node index.js",
-    
+    "start": "node index.js",
+    "dev": "nodemon index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Fachri",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^4.7.0",
+    "mongoose": "^6.4.0",
+    "nodemon": "^2.0.16",
+    "pg": "^8.7.3"
+  }
 }
