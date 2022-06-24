@@ -35,6 +35,7 @@ HTTP.createServer(async function(req,res) {
         }).catch(console.log("Err"))
         res.write("</h4>")
         res.end()
+        
     } else if( pathname == "/mahasiswa") {
       
         
