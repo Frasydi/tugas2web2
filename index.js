@@ -2,10 +2,11 @@ const HTTP = require('http')
 const url = require("url")
 const Anggota = require("./anggota.js")
 const port = process.env.PORT||3000
-const mongo = require('./mongo.js')
+const {mongo, pgdb} = require('./database.js')
 const {capFirstLetter} = require("./functionJs.js")
 const bulan = ["Januari", "Februari", "Maret", "April","Mei","Juni", "Juli", "Agustus","September","Oktober", "November", "Desember" ]
-
+const db = process.argv.slice(2)[0] == "pg" ? pgdb : mongo
+console.log(db, process.argv.slice(2))
 HTTP.createServer(async function(req,res) {
     const {pathname, query} = url.parse(req.url, true)
    
@@ -19,20 +20,42 @@ HTTP.createServer(async function(req,res) {
         <p align="center">Tekan <a href="/kelompok">ini</a> untuk masuk ke dalam data kelompok</p>
         `)
         res.end()
-    } else if(pathname == "/kelompok") {
+    } else if(pathname == "/all") {
+        res.writeHead(200, {
+            'Content-Type' : 'text/html'
+        })
+        let {page} = query
+        if(page == null) {
+            page = 1
+        }
+        const offset= (page-1)*100
+        for(let i = 0; i < 2 ; i++) {
+            res.write(`<a href="/all?page=${i+1}"> ${i+1} </a>`)
+        }
+        await db("", offset, data => {
+            console.log(data)
+             data.forEach(el => {
+                console.log(el.nama)
+                 res.write(`<h3 onmouseenter="this.style.color = 'blue'" onmouseleave="this.style.color = 'black'" onclick="window.location.href = '/mahasiswa?nim=${el.nim}&color=black&backcolor=cyan'">${capFirstLetter(el.nama)}</h3>`)
+            })
+            res.end()
+        })
+        
+    } 
+    else if(pathname == "/kelompok") {
         res.writeHead(200, {
             'Content-Type' : 'text/html'
         })        
         res.write( `
         <button onclick="window.location.href='/'">Kembali</button>
+        <button onclick="window.location.href='/all'">All</button>
+
         <h1 style="text-align:center;margin-top:14%;">Daftar-daftar Mahasiswa</h1>
         <h4 class="list" style="display:flex;flex:1;flex-direction:column;gap:5%;width:max-content;height:max-content;margin:auto;">
         `)
-        await Anggota.getAll().then(dat => {
-            dat.forEach(el => {
+            Anggota.forEach(el => {
                 res.write(`<div class="li"> <a style="color:black;text-decoration:none;" onmouseenter="this.style.color = 'blue'" onmouseleave="this.style.color = 'black'" href='/mahasiswa?nim=${el.nim}&color=black&backcolor=cyan'>${el.nama}</a></div class="li">`)
             })
-        }).catch(console.log("Err"))
         res.write("</h4>")
         res.end()
         
@@ -57,7 +80,7 @@ HTTP.createServer(async function(req,res) {
         if(color == null) {
             color = "black"
         }
-        await mongo(nim, data => {
+        await db(nim, 0,data => {
 
             console.log(data)
             if(data == null) {
@@ -85,6 +108,7 @@ HTTP.createServer(async function(req,res) {
         <h3>Kabupaten/Kota : ${capFirstLetter(data.kabkota)}</h3>
         <h3>Angkatan : ${data.angkatan}</h3>
         <h3>TTL : ${capFirstLetter(data.tempat_lahir)}, ${tanggal}</h3>
+        <h3>Jenis Kelamin : ${data.jenis_kelamin == "L" ? "Laki-laki" : "Perempuan"}</h3>
         <h3 onclick="window.open('https://wa.me/${data.no_hp}?text=Halo', '_blank')">No HP : ${data.no_hp}</h3>
         <h3 style="float:left">Foto : </h3><img onmouseenter="this.style.cursor = 'pointer'" onmouseleave="this.style.cursor = 'default'" onclick="window.location.href = '${foto}' " width="100" height="100" src="${foto}" alt="${foto}" style="margin-left:1.2rem" />
         </div>
