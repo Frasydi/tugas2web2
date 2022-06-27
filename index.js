@@ -43,7 +43,7 @@ HTTP.createServer(async function(req,res) {
             await db("", offset, data => {
                 data.forEach(el => {
                     console.log(el.nama)
-                res.write(`<div class="li"> <a style="color:black;text-decoration:none;" onmouseenter="this.style.color = 'blue'" onmouseleave="this.style.color = 'black'" href='/mahasiswa?nim=${el.nim}&color=black&backcolor=cyan'>${el.nama}</a></div class="li">`)
+                res.write(`<div class="li"> <a style="color:black;text-decoration:none;" onmouseenter="this.style.color = 'blue'" onmouseleave="this.style.color = 'black'" href='/mahasiswa?nim=${el.nim}&color=black&backcolor=cyan'>${capFirstLetter(el.nama)}</a></div class="li">`)
             })
             res.end()
         })
@@ -110,8 +110,6 @@ HTTP.createServer(async function(req,res) {
         <h3 onclick="window.open('https://wa.me/${data.no_hp}?text=Halo', '_blank')">No HP : ${data.no_hp}</h3>
         <h3 style="float:left">Foto : </h3><img onmouseenter="this.style.cursor = 'pointer'" onmouseleave="this.style.cursor = 'default'" onclick="window.location.href = '${foto}' " width="100" height="100" src="${foto}" alt="${foto}" style="margin-left:1.2rem" />
         </div>
-        
-        
         `)
         res.end() 
             
