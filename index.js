@@ -17,7 +17,7 @@ HTTP.createServer(async function(req,res) {
         res.write(`
        
         <h1 align="center"> Selamat Datang di kelompok 4 web Programming </h1>
-        <p align="center">Tekan <a href="/kelompok">ini</a> untuk masuk ke dalam data kelompok</p>
+        <p align="center">Tekan <a href="/list">ini</a> untuk masuk ke dalam data kelompok</p>
         `)
         res.end()
     } else if(pathname == "/all") {
@@ -42,22 +42,31 @@ HTTP.createServer(async function(req,res) {
         })
         
     } 
-    else if(pathname == "/kelompok") {
+    else if(pathname == "/list") {
         res.writeHead(200, {
             'Content-Type' : 'text/html'
         })        
+        let {page} = query
+        if(page == null) {
+            page = 1
+        }
+        const offset= (page-1)*25
         res.write( `
-        <button onclick="window.location.href='/'">Kembali</button>
-        <button onclick="window.location.href='/all'">All</button>
-
-        <h1 style="text-align:center;margin-top:14%;">Daftar-daftar Mahasiswa</h1>
-        <h4 class="list" style="display:flex;flex:1;flex-direction:column;gap:5%;width:max-content;height:max-content;margin:auto;">
+        <button onclick="window.location.href='/'">Kembali</button>`)
+        for(let i = 0; i < 6 ; i++) {
+            res.write(`<a href="/list?page=${i+1}"> ${i+1} </a>`)
+        }
+        res.write(`<h1 style="text-align:center;margin-top:8%;">Daftar-daftar Mahasiswa</h1>
+        <h4 class="list"  style="padding-bottom:5rem;display:flex;flex:1;flex-direction:column;gap:5%;width:max-content;height:max-content;margin:auto;">
         `)
-            Anggota.forEach(el => {
+        await db("", offset, data => {
+             data.forEach(el => {
+                console.log(el.nama)
                 res.write(`<div class="li"> <a style="color:black;text-decoration:none;" onmouseenter="this.style.color = 'blue'" onmouseleave="this.style.color = 'black'" href='/mahasiswa?nim=${el.nim}&color=black&backcolor=cyan'>${el.nama}</a></div class="li">`)
             })
-        res.write("</h4>")
-        res.end()
+            res.end()
+        })
+        
         
     } else if( pathname == "/mahasiswa") {
       

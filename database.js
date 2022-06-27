@@ -19,9 +19,10 @@ const client = new MongoClient(uri, {
 async function postgredb(nim, index, next ) {
     if(nim === "") {
         index = index == NaN ? 0 : index
-        clientPg.query(`SELECT * FROM mahasiswa ORDER BY nama ASC LIMIT 100 OFFSET ${index}`, (err, res) => {
+        clientPg.query(`SELECT * FROM mahasiswa ORDER BY nama ASC LIMIT 25 OFFSET ${index}`, (err, res) => {
             if(err) throw err
-            next(res.rows)
+            console.log(res.rowCount)
+            next(res.rows, res.rowCount)
         })  
         return  
     }
@@ -37,6 +38,7 @@ async function mongodb(nim, index,next, ) {
 
         client.db('web').collection(collection).find({}).skip(index).limit(100).sort({nama : 1}).toArray((err, res) => {
             if(err) throw err
+            console.log(res.length())
             next(res)
         })
         return
