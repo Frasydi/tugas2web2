@@ -38,7 +38,6 @@ async function mongodb(nim, index,next, ) {
 
         client.db('web').collection(collection).find({}).skip(index).limit(100).sort({nama : 1}).toArray((err, res) => {
             if(err) throw err
-            console.log(res.length())
             next(res)
         })
         return
