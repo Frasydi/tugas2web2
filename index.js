@@ -93,7 +93,7 @@ HTTP.createServer(async function(req,res) {
 
             console.log(data)
             if(data == null) {
-                res.writeHead(400, {
+                res.writeHead(404, {
                     'Content-Type' : 'text/html'
                 })
             res.write(`<h1>Tidak Menemukan Nim yang dimaksud</h1>`)
