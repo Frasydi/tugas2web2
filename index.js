@@ -5,8 +5,8 @@ const port = process.env.PORT||3000
 const {mongo, pgdb} = require('./database.js')
 const {capFirstLetter} = require("./functionJs.js")
 const bulan = ["Januari", "Februari", "Maret", "April","Mei","Juni", "Juli", "Agustus","September","Oktober", "November", "Desember" ]
-const db = process.argv.slice(2)[0] == "pg" ? pgdb : mongo
-console.log(db, process.argv.slice(2))
+const db = process.argv[2] == "pg" ? pgdb : mongo
+console.log(db, process.argv[2])
 HTTP.createServer(async function(req,res) {
     const {pathname, query} = url.parse(req.url, true)
    
@@ -36,16 +36,50 @@ HTTP.createServer(async function(req,res) {
             res.write(`<a href="/list?page=${i+1}"> ${i+1} </a>`)
         }
         res.write(`<h1 style="text-align:center;margin-top:8%;">Daftar-daftar Mahasiswa</h1>
-        <h4 class="list"  style="padding-bottom:5rem;display:flex;flex:1;flex-direction:column;gap:5%;width:max-content;height:max-content;margin:auto;">
+        <h4 class="list"  style="width:max-content;padding-bottom:5rem;height:max-content;margin:auto;">
+        <table style="width:100%;">
+        <thead>
+            <th>Nama</th>
+            <th>NIM</th>
+            <th>Jenis Kelamin</th>
+            <th>Alamat</th>
+            <th>No HP</th>
+            <th>Prodi</th>
+            <th>Kelurahan</th>
+            <th>Kecamatan</th>
+            <th>Kab/Kota</th>
+            <th>Provinis</th>
+            <th>Angkatan</th>
+        </thead>
+        <tbody style="text-align:center">
+
         `)
         try {
 
             await db("", offset, data => {
                 data.forEach(el => {
                     console.log(el.nama)
-                res.write(`<div class="li"> <a style="color:black;text-decoration:none;" onmouseenter="this.style.color = 'blue'" onmouseleave="this.style.color = 'black'" href='/mahasiswa?nim=${el.nim}&color=black&backcolor=cyan'>${capFirstLetter(el.nama)}</a></div class="li">`)
+                res.write(`
+
+                <tr style="color:black;text-decoration:none;" onmouseenter="this.style.cursor='pointer';this.style.color = 'blue'" onmouseleave="this.style.cursor='default';this.style.color = 'black'" onclick="window.location.href='/mahasiswa?nim=${el.nim}&color=black&backcolor=cyan'">
+                    <td style="width:10rem;text-align:left">${capFirstLetter(el.nama)}</td>
+                    <td width="max-content">${el.nim}</td>
+                    <td width="max-content">${el.jenis_kelamin == "L" ? "Laki-laki" : "Perempuan"}</td>
+                    <td style="width:max-content;text-align:left;">${capFirstLetter(el.alamat)}</td>
+                    <td width="max-content">${el.no_hp}</td>
+                    <td width="max-content">${capFirstLetter(el.prodi)}</td>
+                    <td width="max-content">${capFirstLetter(el.kelurahan)}</td>
+                    <td width="max-content">${capFirstLetter(el.kecamatan)}</td>
+                    <td width="max-content">${capFirstLetter(el.kabkota)}</td>
+                    <td width="max-content">${capFirstLetter(el.provinsi)}</td>
+                    <td width="max-content">${el.angkatan}</td>
+                </tr>
+                    `)
+            
             })
-            res.end()
+            res.end(`
+            </tbody>
+            </table>`)
         })
         }catch(ex) {
             res.writeHead(404, {
