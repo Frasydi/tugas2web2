@@ -97,7 +97,7 @@ HTTP.createServer(async function(req,res) {
         const tanggal_lahir = new Date(data.tanggal_lahir)
         const tanggal = (tanggal_lahir.getDate()< 10 ? `0${tanggal_lahir.getDate()}`:tanggal_lahir.getDate())+' '+bulan[tanggal_lahir.getMonth()]+' '+tanggal_lahir.getFullYear()
         res.write(`
-        <button onclick="window.location.href='/kelompok'">Kembali</button>
+        <button onclick="window.location.href='/list'">Kembali</button>
         <div style="width:max-content;padding:2rem;margin:auto;background-color:${backcolor}">
         <h3>Nama : ${capFirstLetter(data.nama)}</h3>
         <h3>NIM : ${data.nim}</h3>
