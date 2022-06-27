@@ -36,8 +36,8 @@ HTTP.createServer(async function(req,res) {
             res.write(`<a href="/list?page=${i+1}"> ${i+1} </a>`)
         }
         res.write(`<h1 style="text-align:center;margin-top:8%;">Daftar-daftar Mahasiswa</h1>
-        <h4 class="list"  style="width:max-content;padding-bottom:5rem;height:max-content;margin:auto;">
-        <table style="width:100%;">
+        <h4 class="list"  style="width:100%;padding-bottom:5rem;height:max-content;margin:auto;overflow-x:auto">
+        <table style="width:max-content">
         <thead>
             <th>Nama</th>
             <th>NIM</th>
@@ -78,6 +78,7 @@ HTTP.createServer(async function(req,res) {
             
             })
             res.end(`
+            </h4>
             </tbody>
             </table>`)
         })
