@@ -36,7 +36,7 @@ async function mongodb(nim, index,next, ) {
     if(nim === "") {
         index = index == NaN ? 0 : index
 
-        client.db('web').collection(collection).find({}).skip(index).limit(100).sort({nama : 1}).toArray((err, res) => {
+        client.db('web').collection(collection).find({}).skip(index).limit(25).sort({nama : 1}).toArray((err, res) => {
             if(err) throw err
             next(res)
         })
