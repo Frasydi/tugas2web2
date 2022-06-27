@@ -20,27 +20,6 @@ HTTP.createServer(async function(req,res) {
         <p align="center">Tekan <a href="/list">ini</a> untuk masuk ke dalam data kelompok</p>
         `)
         res.end()
-    } else if(pathname == "/all") {
-        res.writeHead(200, {
-            'Content-Type' : 'text/html'
-        })
-        let {page} = query
-        if(page == null) {
-            page = 1
-        }
-        const offset= (page-1)*100
-        for(let i = 0; i < 2 ; i++) {
-            res.write(`<a href="/all?page=${i+1}"> ${i+1} </a>`)
-        }
-        await db("", offset, data => {
-            console.log(data)
-             data.forEach(el => {
-                console.log(el.nama)
-                 res.write(`<h3 onmouseenter="this.style.color = 'blue'" onmouseleave="this.style.color = 'black'" onclick="window.location.href = '/mahasiswa?nim=${el.nim}&color=black&backcolor=cyan'">${capFirstLetter(el.nama)}</h3>`)
-            })
-            res.end()
-        })
-        
     } 
     else if(pathname == "/list") {
         res.writeHead(200, {
@@ -59,13 +38,22 @@ HTTP.createServer(async function(req,res) {
         res.write(`<h1 style="text-align:center;margin-top:8%;">Daftar-daftar Mahasiswa</h1>
         <h4 class="list"  style="padding-bottom:5rem;display:flex;flex:1;flex-direction:column;gap:5%;width:max-content;height:max-content;margin:auto;">
         `)
-        await db("", offset, data => {
-             data.forEach(el => {
-                console.log(el.nama)
+        try {
+
+            await db("", offset, data => {
+                data.forEach(el => {
+                    console.log(el.nama)
                 res.write(`<div class="li"> <a style="color:black;text-decoration:none;" onmouseenter="this.style.color = 'blue'" onmouseleave="this.style.color = 'black'" href='/mahasiswa?nim=${el.nim}&color=black&backcolor=cyan'>${el.nama}</a></div class="li">`)
             })
             res.end()
         })
+        }catch(ex) {
+            res.writeHead(404, {
+                'Content-Type' : 'text/html'
+            })
+            res.write(`Time Out`)
+            res.end()
+        }
         
         
     } else if( pathname == "/mahasiswa") {
@@ -89,6 +77,7 @@ HTTP.createServer(async function(req,res) {
         if(color == null) {
             color = "black"
         }
+        try {
         await db(nim, 0,data => {
 
             console.log(data)
@@ -125,8 +114,16 @@ HTTP.createServer(async function(req,res) {
         
         `)
         res.end() 
+            
         })
-        
+    }catch(ex) {
+        res.writeHead(404, {
+            'Content-Type' : 'text/html'
+        })
+        res.write(`<h1>Time Out</h1>`)
+        res.end()
+    } 
+       
         
     } else {
         res.writeHead(404, {
