@@ -54,13 +54,13 @@ HTTP.createServer(async function(req,res) {
         <tbody style="text-align:center">
 
         `)
-        try {
 
-            await db("", offset, data => {
+           await db("", offset).then(data => {
+                console.log(data)
+                
                 data.forEach(el => {
-                    console.log(el.nama)
+                console.log(el.nama)
                 res.write(`
-
                 <tr style="color:black;text-decoration:none;" onmouseenter="this.style.cursor='pointer';this.style.color = 'blue'" onmouseleave="this.style.cursor='default';this.style.color = 'black'" onclick="window.location.href='/mahasiswa?nim=${el.nim}&color=black&backcolor=cyan'">
                     <td style="width:10rem;text-align:left">${capFirstLetter(el.nama)}</td>
                     <td width="max-content">${el.nim}</td>
@@ -74,23 +74,14 @@ HTTP.createServer(async function(req,res) {
                     <td width="max-content">${capFirstLetter(el.provinsi)}</td>
                     <td width="max-content">${el.angkatan}</td>
                 </tr>
-                    `)
-            
+                `)
+                
             })
             res.end(`
             </h4>
             </tbody>
             </table>`)
         })
-        }catch(ex) {
-            res.writeHead(404, {
-                'Content-Type' : 'text/html'
-            })
-            res.write(`Time Out`)
-            res.end()
-        }
-        
-        
     } else if( pathname == "/mahasiswa") {
       
         
@@ -112,9 +103,9 @@ HTTP.createServer(async function(req,res) {
         if(color == null) {
             color = "black"
         }
-        try {
-        await db(nim, 0,data => {
+        await db(nim, 0).then(data => {
 
+            
             console.log(data)
             if(data == null) {
                 res.writeHead(404, {
@@ -123,11 +114,11 @@ HTTP.createServer(async function(req,res) {
             res.write(`<h1>Tidak Menemukan Nim yang dimaksud</h1>`)
             res.end()
             return
-            }
-            res.writeHead(200, {
-                'Content-Type' : 'text/html'
-            })
-
+        }
+        res.writeHead(200, {
+            'Content-Type' : 'text/html'
+        })
+        
         const foto = `https://simak.unismuh.ac.id/upload/mahasiswa/${nim}.jpg`
         const tanggal_lahir = new Date(data.tanggal_lahir)
         const tanggal = (tanggal_lahir.getDate()< 10 ? `0${tanggal_lahir.getDate()}`:tanggal_lahir.getDate())+' '+bulan[tanggal_lahir.getMonth()]+' '+tanggal_lahir.getFullYear()
@@ -147,15 +138,11 @@ HTTP.createServer(async function(req,res) {
         </div>
         `)
         res.end() 
-            
+        }).then(error => {
+            console.log(error)
         })
-    }catch(ex) {
-        res.writeHead(404, {
-            'Content-Type' : 'text/html'
-        })
-        res.write(`<h1>Time Out</h1>`)
-        res.end()
-    } 
+        
+   
        
         
     } else {

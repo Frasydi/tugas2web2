@@ -16,48 +16,23 @@ const client = new MongoClient(uri, {
     useNewUrlParser : true,
     useUnifiedTopology : true
 }) 
-async function postgredb(nim, index, next ) {
+async function postgredb(nim, index ) {
     if(nim === "") {
         index = index == NaN ? 0 : index
-        clientPg.query(`SELECT * FROM mahasiswa ORDER BY nama ASC LIMIT 25 OFFSET ${index}`, (err, res) => {
-            if(err) {
-                console.log(err)
-                return
-            }
-            console.log(res.rowCount)
-            next(res.rows, res.rowCount)
-        })  
-        return  
+        const mahasiswa = await clientPg.query(`SELECT * FROM mahasiswa ORDER BY nama ASC LIMIT 25 OFFSET ${index}`)
+        return mahasiswa.rows
     }
-    clientPg.query(`SELECT * FROM mahasiswa WHERE nim='${nim}'`, (err, res) => {
-        if(err) {
-            console.log(err)
-            return
-        }
-        console.log(res)
-        next(res.rows[0])
-    })
+    return await clientPg.query(`SELECT * FROM mahasiswa WHERE nim='${nim}'`)
 }
-async function mongodb(nim, index,next, ) {
+async function mongodb(nim, index) {
     if(nim === "") {
         index = index == NaN ? 0 : index
 
-        client.db('web').collection(collection).find({}).skip(index).limit(25).sort({nama : 1}).toArray((err, res) => {
-            if(err) {
-                console.log(err)
-                return
-            }
-            next(res)
-        })
-        return
+        const mahasiswa = await client.db('web').collection(collection).find({}).skip(index).limit(25).sort({nama : 1}).toArray()
+        return mahasiswa
     }
-    client.db('web').collection(collection).findOne({nim:nim}, (err, res) => {
-        if(err) {
-            console.log(err)
-            return
-        }
-        next(res)
-    })
+    return await client.db('web').collection(collection).findOne({nim:nim})
+
     
 } 
     

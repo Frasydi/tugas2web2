@@ -1,5 +1,8 @@
 
 const capFirstLetter = (text) => {
+    if(text == null) {
+        return text
+    }
     const texts = text.split( /,| |\./)
     let result = "";
     texts.forEach(el => {
