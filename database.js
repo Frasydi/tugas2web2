@@ -20,14 +20,20 @@ async function postgredb(nim, index, next ) {
     if(nim === "") {
         index = index == NaN ? 0 : index
         clientPg.query(`SELECT * FROM mahasiswa ORDER BY nama ASC LIMIT 25 OFFSET ${index}`, (err, res) => {
-            if(err) throw err
+            if(err) {
+                console.log(err)
+                return
+            }
             console.log(res.rowCount)
             next(res.rows, res.rowCount)
         })  
         return  
     }
     clientPg.query(`SELECT * FROM mahasiswa WHERE nim='${nim}'`, (err, res) => {
-        if(err) throw err
+        if(err) {
+            console.log(err)
+            return
+        }
         console.log(res)
         next(res.rows[0])
     })
@@ -37,13 +43,19 @@ async function mongodb(nim, index,next, ) {
         index = index == NaN ? 0 : index
 
         client.db('web').collection(collection).find({}).skip(index).limit(25).sort({nama : 1}).toArray((err, res) => {
-            if(err) throw err
+            if(err) {
+                console.log(err)
+                return
+            }
             next(res)
         })
         return
     }
     client.db('web').collection(collection).findOne({nim:nim}, (err, res) => {
-        if(err) throw err
+        if(err) {
+            console.log(err)
+            return
+        }
         next(res)
     })
     
