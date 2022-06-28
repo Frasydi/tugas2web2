@@ -140,6 +140,8 @@ HTTP.createServer(async function(req,res) {
         res.end() 
         }).then(error => {
             console.log(error)
+        }).catch(err => {
+            console.log(err)
         })
         
    
