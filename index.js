@@ -31,6 +31,14 @@ HTTP.createServer(async function(req,res) {
         
         
         db("", offset).then(data => {
+            if(data.length == 0) {
+                res.writeHead(400, {
+                    'Content-Type' : 'text/html'
+                })
+                res.write(`<h1>Cant find data in that offset</h1>`)
+                res.end()
+                return    
+            }
             console.log(data)
             res.writeHead(200, {
                     'Content-Type' : 'text/html'
@@ -88,7 +96,13 @@ HTTP.createServer(async function(req,res) {
             res.writeHead(500, {
                 'Content-Type' : 'text/html'
             })
-            res.end(`<h1>500 CONNECTION ERROR</h1>`)
+            res.write(`<h1>500 CONNECTION ERROR</h1>
+            <script>
+            const err = ${JSON.stringify(err)}
+                console.log(err)
+            </script>
+            `)
+            res.end()
         })
     } else if( pathname == "/mahasiswa") {
       
@@ -152,8 +166,11 @@ HTTP.createServer(async function(req,res) {
             res.writeHead(500, {
                 'Content-Type' : 'text/html'
             })
-            res.end(`<h1>503 Connection ERROR</h1>`)
-            
+            res.write(`<h1>503 Connection ERROR</h1>
+            const err = ${JSON.stringify(err)}
+            <script>console.log(err)</script>
+            `)
+            res.end()
             
         })
    

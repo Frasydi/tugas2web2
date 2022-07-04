@@ -36,6 +36,7 @@ async function mongodb(nim, index) {
             index = index == NaN ? 0 : index
             
             const mahasiswa = await client.db('web').collection(collection).find({}).skip(index).limit(25).sort({nama : 1}).toArray()
+            
             return mahasiswa
         }
         return await client.db('web').collection(collection).findOne({nim:nim})
