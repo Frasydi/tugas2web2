@@ -28,13 +28,13 @@ HTTP.createServer(async function(req,res) {
             page = 1
         }
         const offset= (page-1)*25
+        res.write( `
+    <button onclick="window.location.href='/'">Kembali</button>`)
+    
         
 
         db("", offset).then(data => {
-                console.log(data)
-                res.write( `
-        <button onclick="window.location.href='/'">Kembali</button>`)
-        
+            console.log(data)
                 res.writeHead(200, {
                     'Content-Type' : 'text/html'
                 })
