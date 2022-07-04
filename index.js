@@ -85,10 +85,10 @@ HTTP.createServer(async function(req,res) {
             </table>`)
         }).catch(err => {
             console.log(err)
-            res.writeHead(503, {
+            res.writeHead(500, {
                 'Content-Type' : 'text/html'
             })
-            res.end(`<h1>503 CONNECTION ERROR</h1>
+            res.end(`<h1>500 CONNECTION ERROR</h1>
             <script>
             console.log('Error')
             </script>`)
@@ -150,7 +150,7 @@ HTTP.createServer(async function(req,res) {
         `)
         res.end() 
         }).catch(err => {
-            res.writeHead(503, {
+            res.writeHead(500, {
                 'Content-Type' : 'text/html'
             })
             res.end(`<h1>503 Connection ERROR</h1>`)
