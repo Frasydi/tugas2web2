@@ -22,20 +22,22 @@ HTTP.createServer(async function(req,res) {
         res.end()
     } 
     else if(pathname == "/list") {
-        res.writeHead(200, {
-            'Content-Type' : 'text/html'
-        })        
+                
         let {page} = query
         if(page == null) {
             page = 1
         }
         const offset= (page-1)*25
-        res.write( `
-        <button onclick="window.location.href='/'">Kembali</button>`)
         
 
         db("", offset).then(data => {
                 console.log(data)
+                res.write( `
+        <button onclick="window.location.href='/'">Kembali</button>`)
+        
+                res.writeHead(200, {
+                    'Content-Type' : 'text/html'
+                })
                 for(let i = 0; i < 6 ; i++) {
                     res.write(`<a href="/list?page=${i+1}"> ${i+1} </a>`)
                 }
