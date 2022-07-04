@@ -28,14 +28,14 @@ HTTP.createServer(async function(req,res) {
             page = 1
         }
         const offset= (page-1)*25
-        res.write( `
-    <button onclick="window.location.href='/'">Kembali</button>`)
-    
         
-
-        db("", offset).then(data => {
+        
+        await db("", offset).then(data => {
             console.log(data)
-                res.writeHead(200, {
+            res.write( `
+        <button onclick="window.location.href='/'">Kembali</button>`)
+        
+            res.writeHead(200, {
                     'Content-Type' : 'text/html'
                 })
                 for(let i = 0; i < 6 ; i++) {
@@ -84,6 +84,7 @@ HTTP.createServer(async function(req,res) {
             </tbody>
             </table>`)
         }).catch(err => {
+            console.log(err)
             res.writeHead(503, {
                 'Content-Type' : 'text/html'
             })
@@ -113,7 +114,7 @@ HTTP.createServer(async function(req,res) {
         if(color == null) {
             color = "black"
         }
-        db(nim, 0).then(data => {
+        await db(nim, 0).then(data => {
 
             
             console.log(data)
