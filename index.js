@@ -30,14 +30,14 @@ HTTP.createServer(async function(req,res) {
         const offset= (page-1)*25
         
         
-        await db("", offset).then(data => {
+        db("", offset).then(data => {
             console.log(data)
+            res.writeHead(200, {
+                    'Content-Type' : 'text/html'
+            })
             res.write( `
         <button onclick="window.location.href='/'">Kembali</button>`)
         
-            res.writeHead(200, {
-                    'Content-Type' : 'text/html'
-                })
                 for(let i = 0; i < 6 ; i++) {
                     res.write(`<a href="/list?page=${i+1}"> ${i+1} </a>`)
                 }
@@ -83,7 +83,6 @@ HTTP.createServer(async function(req,res) {
             </h4>
             </tbody>
             </table>`)
-            return
         }).catch(err => {
             console.log(err)
             res.writeHead(500, {
@@ -112,7 +111,7 @@ HTTP.createServer(async function(req,res) {
         if(color == null) {
             color = "black"
         }
-        await db(nim, 0).then(data => {
+        db(nim, 0).then(data => {
 
             
             console.log(data)
@@ -150,13 +149,13 @@ HTTP.createServer(async function(req,res) {
         return
         }).catch(err => {
             console.log(err)
+            res.writeHead(500, {
+                'Content-Type' : 'text/html'
+            })
+            res.end(`<h1>503 Connection ERROR</h1>`)
+            
             
         })
-        res.writeHead(500, {
-            'Content-Type' : 'text/html'
-        })
-        res.end(`<h1>503 Connection ERROR</h1>`)
-        
    
        
         
