@@ -88,10 +88,7 @@ HTTP.createServer(async function(req,res) {
             res.writeHead(500, {
                 'Content-Type' : 'text/html'
             })
-            res.end(`<h1>500 CONNECTION ERROR</h1>
-            <script>
-            console.log('Error')
-            </script>`)
+            res.end(`<h1>500 CONNECTION ERROR</h1>`)
         })
     } else if( pathname == "/mahasiswa") {
       
