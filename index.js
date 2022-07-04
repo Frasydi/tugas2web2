@@ -32,32 +32,32 @@ HTTP.createServer(async function(req,res) {
         const offset= (page-1)*25
         res.write( `
         <button onclick="window.location.href='/'">Kembali</button>`)
-        for(let i = 0; i < 6 ; i++) {
-            res.write(`<a href="/list?page=${i+1}"> ${i+1} </a>`)
-        }
-        res.write(`<h1 style="text-align:center;margin-top:8%;">Daftar-daftar Mahasiswa</h1>
-        <h4 class="list"  style="width:100%;padding-bottom:5rem;height:max-content;margin:auto;overflow-x:auto">
-        <table style="width:max-content">
-        <thead>
-            <th>Nama</th>
-            <th>NIM</th>
-            <th>Jenis Kelamin</th>
-            <th>Alamat</th>
-            <th>No HP</th>
-            <th>Prodi</th>
-            <th>Kelurahan</th>
-            <th>Kecamatan</th>
-            <th>Kab/Kota</th>
-            <th>Provinis</th>
-            <th>Angkatan</th>
-        </thead>
-        <tbody style="text-align:center">
+        
 
-        `)
-
-           await db("", offset).then(data => {
+        db("", offset).then(data => {
                 console.log(data)
-                
+                for(let i = 0; i < 6 ; i++) {
+                    res.write(`<a href="/list?page=${i+1}"> ${i+1} </a>`)
+                }
+                res.write(`<h1 style="text-align:center;margin-top:8%;">Daftar-daftar Mahasiswa</h1>
+                <h4 class="list"  style="width:100%;padding-bottom:5rem;height:max-content;margin:auto;overflow-x:auto">
+                <table style="width:max-content">
+                <thead>
+                    <th>Nama</th>
+                    <th>NIM</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Alamat</th>
+                    <th>No HP</th>
+                    <th>Prodi</th>
+                    <th>Kelurahan</th>
+                    <th>Kecamatan</th>
+                    <th>Kab/Kota</th>
+                    <th>Provinis</th>
+                    <th>Angkatan</th>
+                </thead>
+                <tbody style="text-align:center">
+        
+                `)
                 data.forEach(el => {
                 console.log(el.nama)
                 res.write(`
@@ -81,6 +81,8 @@ HTTP.createServer(async function(req,res) {
             </h4>
             </tbody>
             </table>`)
+        }).catch(err => {
+            res.end(`<h1>CONNECTION ERROR</h1><script>console.log(${err})</script>`)
         })
     } else if( pathname == "/mahasiswa") {
       
@@ -103,7 +105,7 @@ HTTP.createServer(async function(req,res) {
         if(color == null) {
             color = "black"
         }
-        await db(nim, 0).then(data => {
+        db(nim, 0).then(data => {
 
             
             console.log(data)
@@ -138,9 +140,8 @@ HTTP.createServer(async function(req,res) {
         </div>
         `)
         res.end() 
-        }).then(error => {
-            console.log(error)
         }).catch(err => {
+            res.end(`Connection ERROR`)
             console.log(err)
         })
         
