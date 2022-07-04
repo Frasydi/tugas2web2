@@ -83,6 +83,7 @@ HTTP.createServer(async function(req,res) {
             </h4>
             </tbody>
             </table>`)
+            return
         }).catch(err => {
             console.log(err)
             res.writeHead(500, {
@@ -146,13 +147,15 @@ HTTP.createServer(async function(req,res) {
         </div>
         `)
         res.end() 
+        return
         }).catch(err => {
-            res.writeHead(500, {
-                'Content-Type' : 'text/html'
-            })
-            res.end(`<h1>503 Connection ERROR</h1>`)
             console.log(err)
+            
         })
+        res.writeHead(500, {
+            'Content-Type' : 'text/html'
+        })
+        res.end(`<h1>503 Connection ERROR</h1>`)
         
    
        
