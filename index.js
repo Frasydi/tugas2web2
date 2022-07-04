@@ -82,7 +82,13 @@ HTTP.createServer(async function(req,res) {
             </tbody>
             </table>`)
         }).catch(err => {
-            res.end(`<h1>CONNECTION ERROR</h1><script>console.log(${err})</script>`)
+            res.writeHead(503, {
+                'Content-Type' : 'text/html'
+            })
+            res.end(`<h1>503 CONNECTION ERROR</h1>
+            <script>
+            console.log('Error')
+            </script>`)
         })
     } else if( pathname == "/mahasiswa") {
       
@@ -141,7 +147,10 @@ HTTP.createServer(async function(req,res) {
         `)
         res.end() 
         }).catch(err => {
-            res.end(`Connection ERROR`)
+            res.writeHead(503, {
+                'Content-Type' : 'text/html'
+            })
+            res.end(`<h1>503 Connection ERROR</h1>`)
             console.log(err)
         })
         
