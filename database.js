@@ -17,21 +17,31 @@ const client = new MongoClient(uri, {
     useUnifiedTopology : true
 }) 
 async function postgredb(nim, index ) {
-    if(nim === "") {
-        index = index == NaN ? 0 : index
-        const mahasiswa = await clientPg.query(`SELECT * FROM mahasiswa ORDER BY nama ASC LIMIT 25 OFFSET ${index}`)
-        return mahasiswa.rows
+    try {
+        await clientPg.connect()
+        if(nim === "") {
+            index = index == NaN ? 0 : index
+            const mahasiswa = await clientPg.query(`SELECT * FROM mahasiswa ORDER BY nama ASC LIMIT 25 OFFSET ${index}`)
+            return mahasiswa.rows
+        }
+        return await clientPg.query(`SELECT * FROM mahasiswa WHERE nim='${nim}'`)
+    } finally {
+        
     }
-    return await clientPg.query(`SELECT * FROM mahasiswa WHERE nim='${nim}'`)
 }
 async function mongodb(nim, index) {
-    if(nim === "") {
-        index = index == NaN ? 0 : index
-
-        const mahasiswa = await client.db('web').collection(collection).find({}).skip(index).limit(25).sort({nama : 1}).toArray()
-        return mahasiswa
+    try {
+        await client.connect()
+        if(nim === "") {
+            index = index == NaN ? 0 : index
+            
+            const mahasiswa = await client.db('web').collection(collection).find({}).skip(index).limit(25).sort({nama : 1}).toArray()
+            return mahasiswa
+        }
+        return await client.db('web').collection(collection).findOne({nim:nim})
+    }finally {
+        client.close()
     }
-    return await client.db('web').collection(collection).findOne({nim:nim})
 
     
 } 
