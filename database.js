@@ -1,6 +1,6 @@
 const {MongoClient} = require('mongodb')
 const collection = "mahasiswa"
-const uri = "mongodb://mahasiswa:if2020@if.unismuh.ac.id:27017/web"
+const uri = "mongodb://mahasiswa:if2020@if.unismuh.ac.id:27018/web"
 
 const postgre = {
     host : "data.if.unismuh.ac.id",
