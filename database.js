@@ -79,6 +79,7 @@ const mongodbs = {
                 res : mahasiswa
             }
         }finally {
+            mongoose.disconnect()
         }
     },
     async getNim(nim){
@@ -102,6 +103,8 @@ const mongodbs = {
                 res : result
             }
         }finally {
+            mongoose.disconnect()
+
         }
     }
 }
