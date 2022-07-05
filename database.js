@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 const collection = "mahasiswa"
 const uri = process.env.DATABASE_URL
+mongoose.connect(uri, {
+    useNewUrlParser: true
+}) 
 const mongoSchema = new mongoose.Schema({
     nama : String,
     nim : String,
@@ -24,7 +27,6 @@ const postgre = {
 }
 const {Pool} = require('pg')
 const clientPg = new Pool(postgre)
-mongoose.connect(uri)
 
 const postgredb = {
     async getAll(offset, limit) {
