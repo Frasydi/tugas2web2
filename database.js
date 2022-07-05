@@ -1,7 +1,9 @@
 const mongoose = require('mongoose')
-const uri = process.env.DATABASE_URL
 
-const mongoSchema = new mongoose.Schema({
+const uri = process.env.DATABASE_URL
+const mongo1 = mongoose.createConnection(uri)
+
+const mongoSchema = new mongo1.Schema({
     nama : String,
     nim : String,
     jenis_kelamin : String,
@@ -13,7 +15,7 @@ const mongoSchema = new mongoose.Schema({
     kabkota : String,
     provinsi : String,
 })
-const mongoModel = mongoose.model("mahasiswa", mongoSchema, "mahasiswa")
+const mongoModel = mongo1.model("mahasiswa", mongoSchema, "mahasiswa")
 const postgre = {
     host : "data.if.unismuh.ac.id",
     port : 5220,
@@ -68,7 +70,7 @@ const postgredb = {
 const mongodbs = {
     async getAll(offset, limit) {
         try {
-            mongoose.connect(uri)
+            
             console.log(limit)
             limit = limit == null || limit < 0 ? parseInt(Number.MAX_SAFE_INTEGER.toFixed()) : parseInt(limit)
             offset = offset == null ? 0 : parseInt(offset)
@@ -79,12 +81,11 @@ const mongodbs = {
                 res : mahasiswa
             }
         }finally {
-            mongoose.disconnect()
         }
     },
     async getNim(nim){
         try {
-            mongoose.connect(uri)
+            
             if(nim == null) {
                 return {
                     status : 400,
@@ -103,7 +104,6 @@ const mongodbs = {
                 res : result
             }
         }finally {
-            mongoose.disconnect()
 
         }
     }

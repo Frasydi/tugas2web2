@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const uri = process.env.DATABASE_Mahasiswa2
-const mahasiswaSchema = new mongoose.Schema({
+const mongo2 = mongoose.createConnection(uri)
+const mahasiswaSchema = new mongo2.Schema({
     nama : {
         type : String,
         required : true,
@@ -48,7 +49,7 @@ const mahasiswaSchema = new mongoose.Schema({
 
 
 
-const MahasiswaModel = mongoose.model("mahasiswa2", mahasiswaSchema, "mahasiswa")
+const MahasiswaModel = mongo2.model("mahasiswa2", mahasiswaSchema, "mahasiswa")
 
 async function getAll() {
     try {
