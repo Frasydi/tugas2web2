@@ -21,9 +21,10 @@ const postgre = {
     user : "mahasiswa",
     password : "if2020",
     
- }
+}
 const {Pool} = require('pg')
 const clientPg = new Pool(postgre)
+mongoose.connect(uri)
 
 const postgredb = {
     async getAll(offset, limit) {
@@ -68,7 +69,6 @@ const postgredb = {
 const mongodbs = {
     async getAll(offset, limit) {
         try {
-            await mongoose.connect(uri)
             console.log(limit)
             limit = limit == null || limit < 0 ? parseInt(Number.MAX_SAFE_INTEGER.toFixed()) : parseInt(limit)
             offset = offset == null ? 0 : parseInt(offset)
@@ -79,12 +79,10 @@ const mongodbs = {
                 res : mahasiswa
             }
         }finally {
-            await mongoose.connection.close()
         }
     },
     async getNim(nim){
         try {
-            await mongoose.connect(uri)
             if(nim == null) {
                 return {
                     status : 400,
@@ -103,7 +101,6 @@ const mongodbs = {
                 res : result
             }
         }finally {
-            await mongoose.connection.close()
         }
     }
 }
