@@ -28,7 +28,7 @@ const clientPg = new Pool(postgre)
 const postgredb = {
     async getAll(offset, limit) {
         try {
-            clientPg.connect()
+            await clientPg.connect()
             let ekstra = ""
             if(limit != null || limit> 0) {
                 ekstra = "LIMIT "+limit
@@ -37,12 +37,12 @@ const postgredb = {
             const mahasiswa = await clientPg.query(`SELECT * FROM mahasiswa ORDER BY nama ASC ${ekstra} OFFSET ${offset}`)
             return {status : 200,res : mahasiswa.rows}
         } finally {
-            
+            await clientPg.end()
         }
     },
     async getNim(nim) {
         try {
-            clientPg.connect()
+            await clientPg.connect()
             if(nim == null) {
                 return {
                     status : 400,
@@ -61,7 +61,7 @@ const postgredb = {
                 res : result.rows[0]
             }
         } finally {
-
+            await clientPg.end()
         }
     }
 }
@@ -73,13 +73,12 @@ const mongodbs = {
             limit = limit == null || limit < 0 ? parseInt(Number.MAX_SAFE_INTEGER.toFixed()) : parseInt(limit)
             offset = offset == null ? 0 : parseInt(offset)
             console.log(limit)
-           const mahasiswa =  mongoModel.find({}).skip(offset).limit(limit).sort({nama : 1}).toArray()    
+           const mahasiswa =  await mongoModel.find({}).skip(offset).limit(limit).sort({nama : 1})
             return {
                 status : 200,
                 res : mahasiswa
             }
         }finally {
-            mongoose.disconnect()
         }
     },
     async getNim(nim){
@@ -103,7 +102,6 @@ const mongodbs = {
                 res : result
             }
         }finally {
-            mongoose.disconnect()
         }
     }
 }
