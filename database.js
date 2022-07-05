@@ -1,9 +1,6 @@
 const mongoose = require('mongoose')
-const collection = "mahasiswa"
 const uri = process.env.DATABASE_URL
-mongoose.connect(uri, {
-    useNewUrlParser: true
-}) 
+
 const mongoSchema = new mongoose.Schema({
     nama : String,
     nim : String,
@@ -71,6 +68,7 @@ const postgredb = {
 const mongodbs = {
     async getAll(offset, limit) {
         try {
+            mongoose.connect(uri)
             console.log(limit)
             limit = limit == null || limit < 0 ? parseInt(Number.MAX_SAFE_INTEGER.toFixed()) : parseInt(limit)
             offset = offset == null ? 0 : parseInt(offset)
@@ -81,17 +79,19 @@ const mongodbs = {
                 res : mahasiswa
             }
         }finally {
+            mongoose.disconnect()
         }
     },
     async getNim(nim){
         try {
+            mongoose.connect(uri)
             if(nim == null) {
                 return {
                     status : 400,
                     res : "NIM IS NOT VALID"
                 }
             }
-            const result =  await client.db('web').collection(collection).findOne({nim : nim})
+            const result =  await mongoModel.findOne({nim : nim})
             if(result == null) {
                 return {
                     status : 404,
@@ -103,6 +103,7 @@ const mongodbs = {
                 res : result
             }
         }finally {
+            mongoose.disconnect()
         }
     }
 }

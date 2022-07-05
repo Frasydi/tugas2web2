@@ -1,8 +1,5 @@
 const mongoose = require('mongoose')
 const uri = process.env.DATABASE_Mahasiswa2
-mongoose.connect(uri, {
-    useNewUrlParser: true
-})
 const mahasiswaSchema = new mongoose.Schema({
     nama : {
         type : String,
@@ -56,7 +53,7 @@ const MahasiswaModel = mongoose.model("mahasiswa2", mahasiswaSchema, "mahasiswa"
 async function getAll() {
     try {
        const mahasiswa = await MahasiswaModel.find({}).sort({nama:1})
-       
+       await mongoose.connect(uri)
        return {res:mahasiswa,status:200}
     } finally {
     }
@@ -66,6 +63,7 @@ async function getNIM(nim) {
     try {
 
         const mahasiswa = await MahasiswaModel.findOne({nim:nim})
+       await mongoose.connect(uri)
         
         if(Object.keys(mahasiswa).length == 0) {
             return {
