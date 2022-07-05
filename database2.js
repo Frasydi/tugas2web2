@@ -54,10 +54,8 @@ const MahasiswaModel = mongo2.model("mahasiswa2", mahasiswaSchema, "mahasiswa")
 async function getAll() {
     try {
        const mahasiswa = await MahasiswaModel.find({}).sort({nama:1})
-       mongoose.connect(uri)
        return {res:mahasiswa,status:200}
     } finally {
-        mongoose.disconnect()
     }
 }
 
@@ -65,7 +63,6 @@ async function getNIM(nim) {
     try {
 
         const mahasiswa = await MahasiswaModel.findOne({nim:nim})
-       mongoose.connect(uri)
         
         if(Object.keys(mahasiswa).length == 0) {
             return {
@@ -85,7 +82,6 @@ async function getNIM(nim) {
 
 async function addMahasiswa(mahasiswa) {
     try {   
-        mongoose.connect(uri)     
         if(mahasiswa == null ||mahasiswa == undefined) {
             return {
                 status : 400,
@@ -122,7 +118,6 @@ async function addMahasiswa(mahasiswa) {
     }
     
     } finally {
-        mongoose.disconnect()
     }
 
 

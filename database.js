@@ -70,7 +70,7 @@ const postgredb = {
 const mongodbs = {
     async getAll(offset, limit) {
         try {
-            
+        
             console.log(limit)
             limit = limit == null || limit < 0 ? parseInt(Number.MAX_SAFE_INTEGER.toFixed()) : parseInt(limit)
             offset = offset == null ? 0 : parseInt(offset)
@@ -92,7 +92,7 @@ const mongodbs = {
                     res : "NIM IS NOT VALID"
                 }
             }
-            const result =  await mongoModel.findOne({nim : nim})
+            const result =  await mongoModel.findOne({nim:nim})
             if(result == null) {
                 return {
                     status : 404,

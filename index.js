@@ -39,7 +39,7 @@ const paths = pathname.slice(1).split('/')
                 })
                 res.end(`500 Error`)
             })
-        } else if(paths[0] == "mahasiswa2" && paths[1] == "all") {
+        } else if(paths[0] == "mahasiswa2" && paths[1] == "nim") {
             console.log(pathname)
             const nim = paths[2]
             
@@ -103,7 +103,7 @@ const paths = pathname.slice(1).split('/')
                 res.end()
                 return
             }
-            mahasiswa.getNIM(nim).then(data => {
+            db.getNim(nim).then(data => {
                 const isClientError = !(typeof data.res == "object")    
                 console.log(isClientError)
                 res.writeHead(data.status, {
