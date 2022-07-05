@@ -8,8 +8,8 @@
     "npm": "8.3.1"
   },
   "scripts": {
-    "start": "node index2.js",
-    "dev": "nodemon index2.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Fachri",

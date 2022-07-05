@@ -1,7 +1,19 @@
-const {MongoClient} = require('mongodb')
+const mongoose = require('mongoose')
 const collection = "mahasiswa"
 const uri = process.env.DATABASE_URL
-
+const mongoSchema = new mongoose.Schema({
+    nama : String,
+    nim : String,
+    jenis_kelamin : String,
+    alamat : String,
+    no_hp : String,
+    prodi : String,
+    kelurahan : String,
+    kecamatan : String,
+    kabkota : String,
+    provinsi : String,
+})
+const mongoModel = mongoose.model("mahasiswa", mongoSchema, "mahasiswa")
 const postgre = {
     host : "data.if.unismuh.ac.id",
     port : 5220,
@@ -12,7 +24,6 @@ const postgre = {
  }
 const {Pool} = require('pg')
 const clientPg = new Pool(postgre)
-const client = new MongoClient(uri) 
 
 const postgredb = {
     async getAll(offset, limit) {
@@ -57,23 +68,23 @@ const postgredb = {
 const mongodbs = {
     async getAll(offset, limit) {
         try {
-            await client.connect()
+            await mongoose.connect(uri)
             console.log(limit)
             limit = limit == null || limit < 0 ? parseInt(Number.MAX_SAFE_INTEGER.toFixed()) : parseInt(limit)
             offset = offset == null ? 0 : parseInt(offset)
             console.log(limit)
-           const mahasiswa = await client.db('web').collection(collection).find({}).skip(offset).limit(limit).sort({nama : 1}).toArray()    
+           const mahasiswa =  mongoModel.find({}).skip(offset).limit(limit).sort({nama : 1}).toArray()    
             return {
                 status : 200,
                 res : mahasiswa
             }
         }finally {
-            await client.close()
+            await mongoose.connection.close()
         }
     },
     async getNim(nim){
         try {
-            await client.connect()
+            await mongoose.connect(uri)
             if(nim == null) {
                 return {
                     status : 400,
@@ -92,7 +103,7 @@ const mongodbs = {
                 res : result
             }
         }finally {
-            await client.close()
+            await mongoose.connection.close()
         }
     }
 }
