@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const uri = process.env.DATABASE_URL
 const mongo1 = mongoose.createConnection(uri)
 
-const mongoSchema = new mongo1.Schema({
+const mongoSchema = new mongoose.Schema({
     nama : String,
     nim : String,
     jenis_kelamin : String,

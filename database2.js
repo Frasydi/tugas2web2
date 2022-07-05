@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const uri = process.env.DATABASE_Mahasiswa2
 const mongo2 = mongoose.createConnection(uri)
-const mahasiswaSchema = new mongo2.Schema({
+const mahasiswaSchema = new mongoose.Schema({
     nama : {
         type : String,
         required : true,
