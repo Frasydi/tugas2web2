@@ -1,14 +1,14 @@
-GET http://localhost:3000 
+GET https://tugas2web2.herokuapp.com 
 ###
-GET http://localhost:3000/mahasiswa
+GET https://tugas2web2.herokuapp.com/mahasiswa
 ###
-GET http://localhost:3000/mahasiswa/all
+GET https://tugas2web2.herokuapp.com/mahasiswa/all
 ###
-GET http://localhost:3000/mahasiswa2/all
+GET https://tugas2web2.herokuapp.com/mahasiswa2/all
 ###
-GET http://localhost:3000/mahasiswa/nim/105841106620
+GET https://tugas2web2.herokuapp.com/mahasiswa/nim/105841106620
 ###
-POST http://localhost:3000/mahasiswa2/upload
+POST https://tugas2web2.herokuapp.com/mahasiswa2/upload
 Content-Type: application/json
 
 {

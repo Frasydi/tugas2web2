@@ -103,7 +103,7 @@ const paths = pathname.slice(1).split('/')
                 res.end()
                 return
             }
-            mahasiswa.getNim(nim).then(data => {
+            mahasiswa.getNIM(nim).then(data => {
                 const isClientError = !(typeof data.res == "object")    
                 console.log(isClientError)
                 res.writeHead(data.status, {
