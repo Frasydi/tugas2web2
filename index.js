@@ -122,7 +122,7 @@ const paths = pathname.slice(1).split('/')
                     'mode' : 'cors',
                     'body' : JSON.stringify(mahasiswa)
                 }).then(
-                    res => {
+                    async (res) => {
                         if(res.status >= 400) {
                             const text = await res.text()
                             app.innerHTML =  "<h1>"+text+"</h1>"
