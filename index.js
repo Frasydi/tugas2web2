@@ -101,8 +101,9 @@ const paths = pathname.slice(1).split('/')
             const app= document.querySelector(".app")
             const form = document.querySelector("form")
             form.addEventListener('submit', (el) => {
+                console.log(app)
                 el.preventDefault()
-                app.innerHtml = "<h1>Menunggu</h1>"
+                app.innerHTML = "<h1>Menunggu</h1>"
                 const mahasiswa = {
                     nama : el.target[0].value,
                     nim : el.target[1].value,
@@ -123,13 +124,16 @@ const paths = pathname.slice(1).split('/')
                 }).then(
                     res => {
                         if(res.status >= 400) {
-                            app.innerHtml =  "<h1>"+"await res.text()"+"</h1>"
+                            const text = await res.text()
+                            app.innerHTML =  "<h1>"+text+"</h1>"
                             return
                         }
-                        app.innerHtml = "<h1>Berhasil ditambahkan</h1>"
+                        app.innerHTML = "<h1>Berhasil ditambahkan</h1>"
+                        console.log(await res.json())
                     }
                 ).catch(err => {
-                    app.innerHtml = "<h1>Berhasil Ditambahkan</h1>"
+                    console.log(err)
+                    app.innerHTML = "<h1>Berhasil Ditambahkan</h1>"
                 })
             })
             </script>
