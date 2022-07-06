@@ -117,6 +117,7 @@ const paths = pathname.slice(1).split('/')
                     }
                 }
                 fetch("https://tugas2web2.herokuapp.com/mahasiswa2/upload", {
+                    'method':'POST'
                     'mode' : 'cors',
                     'body' : JSON.stringify(mahasiswa)
                 }).then(
