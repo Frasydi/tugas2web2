@@ -113,7 +113,7 @@ async function addMahasiswa(mahasiswa) {
         }
     }
     try {
-        mahasiswaBaru.save()
+        await mahasiswaBaru.save()
     }catch(err) {
         console.log('Error')
         console.log(err)
