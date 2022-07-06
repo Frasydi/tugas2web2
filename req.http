@@ -24,3 +24,34 @@ Content-Type: application/json
         "tugas_final" : "100"
     }
 }
+
+
+
+
+###
+GET https://tugas2web2.herokuapp.com 
+###
+GET https://tugas2web2.herokuapp.com/mahasiswa
+###
+GET https://tugas2web2.herokuapp.com/mahasiswa/all
+###
+GET https://tugas2web2.herokuapp.com/mahasiswa2/all
+###
+GET https://tugas2web2.herokuapp.com/mahasiswa/nim/105841106620
+###
+POST https://tugas2web2.herokuapp.com/mahasiswa2/upload
+Content-Type: application/json
+
+{
+    "nama" : "Fachri",
+    "nim" : "105841106320",
+    "jurusan" : "Informatika",
+    "alamat" : "BTN",
+    "kelas" : "4B",
+    "kelompok" : "4",
+    "nilai" : {
+        "tugas1" : "90",
+        "tugas2" : "100",
+        "tugas_final" : "100"
+    }
+}

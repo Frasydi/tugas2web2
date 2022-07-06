@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const uri = process.env.DATABASE_Mahasiswa2
-const mongo2 = mongoose.createConnection(uri)
+const mongo2 = new mongoose.createConnection(uri)
+
+
 const mahasiswaSchema = new mongoose.Schema({
     nama : {
         type : String,
@@ -52,7 +54,10 @@ const mahasiswaSchema = new mongoose.Schema({
 const MahasiswaModel = mongo2.model("mahasiswa2", mahasiswaSchema, "mahasiswa")
 
 async function getAll() {
+    console.log("Get All")
+    
     try {
+        
        const mahasiswa = await MahasiswaModel.find({}).sort({nama:1})
        return {res:mahasiswa,status:200}
     } finally {
@@ -61,7 +66,6 @@ async function getAll() {
 
 async function getNIM(nim) {
     try {
-
         const mahasiswa = await MahasiswaModel.findOne({nim:nim})
         
         if(Object.keys(mahasiswa).length == 0) {

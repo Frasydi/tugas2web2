@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 
 const uri = process.env.DATABASE_URL
-const mongo1 = mongoose.createConnection(uri)
+const mongo1 = new mongoose.createConnection(uri)
+
 
 const mongoSchema = new mongoose.Schema({
     nama : String,
@@ -14,6 +15,9 @@ const mongoSchema = new mongoose.Schema({
     kecamatan : String,
     kabkota : String,
     provinsi : String,
+    angkatan : String,
+    tempat_lahir : String,
+    tanggal_lahir : Date,
 })
 const mongoModel = mongo1.model("mahasiswa", mongoSchema, "mahasiswa")
 const postgre = {
@@ -39,7 +43,6 @@ const postgredb = {
             const mahasiswa = await clientPg.query(`SELECT * FROM mahasiswa ORDER BY nama ASC ${ekstra} OFFSET ${offset}`)
             return {status : 200,res : mahasiswa.rows}
         } finally {
-            await clientPg.end()
         }
     },
     async getNim(nim) {
@@ -63,7 +66,6 @@ const postgredb = {
                 res : result.rows[0]
             }
         } finally {
-            await clientPg.end()
         }
     }
 }
