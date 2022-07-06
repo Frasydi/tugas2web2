@@ -308,7 +308,7 @@ const paths = pathname.slice(1).split('/')
                 <a href="/web/edit/${data.nim}">Edit</a>
                 <div class="card">
                     <div class="gambar">
-                    <img width=200 height=200 src="https:simak.unismuh.ac.id/upload/mahasiswa/${nim}.jpg">
+                    <img width=200 height=200 src="https://simak.unismuh.ac.id/upload/mahasiswa/${nim}.jpg">
                     </div>
                     <div class="text">
                         <div class="list"> Nama : ${data.nama}</div>
