@@ -102,6 +102,33 @@ const paths = pathname.slice(1).split('/')
             form.addEventListener('submit', (el) => {
                 el.preventDefault()
                 console.log(el.target[0])
+                const mahasiswa = {
+                    nama : el.target[0].value
+                    nim : el.target[1].value
+                    alamat : el.target[2].value
+                    kelompok : el.target[3].value
+                    kelas : el.target[4].value
+                    jurusan : el.target[5].value
+                    nilai : {
+                        tugas1 : el.target[6].value
+                        tugas2 : el.target[7].value
+                        tugas_final : el.target[8].value
+                    }
+                }
+                fetch("https://tugas2web2.herokuapp.com/mahasiswa2/upload", {
+                    'mode' : 'cors'
+                    'body' : mahasiswa
+                }).then(
+                    res => {
+                        if(res.status >= 400) {
+                            app.innerHtml =  "<h1>"+"await res.text()"+"</h1>"
+                            return
+                        }
+                        app.innerHtml = "<h1>Berhasil ditambahkan</h1>"
+                    }
+                ).catch(err => {
+                    app.innerHtml = "<h1>Berhasil Ditambahkan</h1>"
+                })
             })
             </script>
             </body>
