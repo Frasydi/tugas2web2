@@ -132,7 +132,7 @@ const paths = pathname.slice(1).split('/')
                     'method':'POST',
                     'mode' : 'cors',
                     'body' : JSON.stringify(mahasiswa),
-                    'header' : {'authorization' : "Frasydi"}
+                    'headers' : {'authorization' : "Frasydi"}
                 }).then(
                     async (res) => {
                         if(res.status >= 400) {
@@ -231,7 +231,7 @@ const paths = pathname.slice(1).split('/')
                     'method':'PUT',
                     'mode' : 'cors',
                     'body' : JSON.stringify(mahasiswa),
-                    'header' : {'authorization' : "Frasydi"}
+                    'headers' : {'authorization' : "Frasydi"}
                 }).then(
                     async (res) => {
                         if(res.status >= 400) {
