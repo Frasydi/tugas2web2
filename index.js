@@ -74,23 +74,22 @@ const paths = pathname.slice(1).split('/')
                 <h1>Tambahkan Siswa</h1>
         <form>
             <label for="nama">Nama : </label>
-            <input type="text" id="nama">
+            <input type="text" id="nama"><br>
             <label for="nim">nim : </label>
-            <input type="text" id="nim">
+            <input type="text" id="nim"><br>
             <label for="alamat">alamat : </label>
-            <input type="text" id="alamat">
+            <input type="text" id="alamat"><br>
             <label for="kelompok">kelompok : </label>
-            <input type="text" id="kelompok">
+            <input type="text" id="kelompok"><br>
             <label for="kelas">kelas : </label>
-            <input type="text" id="kelas">
-            <p>Tugas : </p>
+            <input type="text" id="kelas"><br>
             <label for="jurusan">jurusan : </label>
-            <input type="text" id="jurusan">
-            <p>Tugas : </p>
+            <input type="text" id="jurusan"><br>
+            <p>Tugas : </p><br>
             <label for="tugas1"> Tugas1 : </label>
-            <input type="number" min=0 max=100 id="tugas1">
+            <input type="number" min=0 max=100 id="tugas1"><br>
             <label for="tugas2"> Tugas2 : </label>
-            <input type="number" min=0 max=100 id="tugas2">
+            <input type="number" min=0 max=100 id="tugas2"><br>
             <label for="tugas_final"> Tugas Final : </label>
             <input type="number" min=0 max=100 id="tugas_final">
         </form>
