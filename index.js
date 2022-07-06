@@ -92,7 +92,7 @@ const paths = pathname.slice(1).split('/')
             <input type="number" min=0 max=100 id="tugas2"><br>
             <label for="tugas_final"> Tugas Final : </label>
             <input type="number" min=0 max=100 id="tugas_final">
-            <button type="submit"></button>
+            <button type="submit">Tambah</button>
         </form>
         <div class="app">
         
