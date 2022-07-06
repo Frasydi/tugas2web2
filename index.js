@@ -114,7 +114,7 @@ const paths = pathname.slice(1).split('/')
                     nilai : {
                         tugas1 : el.target[6].value,
                         tugas2 : el.target[7].value,
-                        tugas_final : el.target[8].value,
+                        tugas_final : el.target[8].value
                     }
                 }
                 fetch("https://tugas2web2.herokuapp.com/mahasiswa2/upload", {
@@ -133,7 +133,7 @@ const paths = pathname.slice(1).split('/')
                     }
                 ).catch(err => {
                     console.log(err)
-                    app.innerHTML = "<h1>Berhasil Ditambahkan</h1>"
+                    app.innerHTML = "<h1>"+err+"</h1>"
                 })
             })
             </script>
