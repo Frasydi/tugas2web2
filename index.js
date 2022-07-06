@@ -117,7 +117,7 @@ const paths = pathname.slice(1).split('/')
                 }
                 fetch("https://tugas2web2.herokuapp.com/mahasiswa2/upload", {
                     'mode' : 'cors'
-                    'body' : mahasiswa
+                    'body' : JSON.stringify(mahasiswa)
                 }).then(
                     res => {
                         if(res.status >= 400) {
