@@ -140,7 +140,7 @@ const paths = pathname.slice(1).split('/')
                             app.innerHTML =  "<h1>"+text+"</h1>"
                             return
                         }
-                        app.innerHTML = "<h1>Berhasil diupdate</h1>"
+                        app.innerHTML = "<h1>Berhasil ditambahkan</h1>"
                         window.location.href = "/web/list2"
                     }
                 ).catch(err => {
@@ -240,7 +240,9 @@ const paths = pathname.slice(1).split('/')
                             app.innerHTML =  "<h1>"+text+"</h1>"
                             return
                         }
-                        app.innerHTML = "<h1>Berhasil ditambahkan</h1>"
+                        app.innerHTML = "<h1>Berhasil diupdate</h1>"
+                        window.location.href = "/web/list2"
+
                     }
                 ).catch(err => {
                     console.log(err)
