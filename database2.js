@@ -42,15 +42,17 @@ const mahasiswaSchema = new mongoose.Schema({
                     if(typeof this.nilai != 'object') {
                         return false
                     }
-                    if(this.nilai.tugas1==null||this.nilai.tugas2==null||this.nilai.tugas_final==null) {
+                    const keys = Object.keys(this.nilai)
+                    if(keys.length < 3) {
                         return false
                     }
+                    if(keys[0] != "tugas1" || keys[1] != "tugas2" ||keys[2] != "tugas_final"  ) return false
                     return true
                 }catch(err) {
                     return false
                 }
             }
-        }
+        }, message : "Nilai Error"
     }
 })
 
