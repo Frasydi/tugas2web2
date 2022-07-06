@@ -141,7 +141,7 @@ const paths = pathname.slice(1).split('/')
                             return
                         }
                         app.innerHTML = "<h1>Berhasil diupdate</h1>"
-                        windows.location.href = "/web/list2"
+                        window.location.href = "/web/list2"
                     }
                 ).catch(err => {
                     console.log(err)
