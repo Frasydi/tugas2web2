@@ -34,16 +34,21 @@ const mahasiswaSchema = new mongoose.Schema({
         required : true,
         validate : {
             validator : function() {
-                if(this.nilai == null) {
+                try {
+
+                    if(this.nilai == null) {
+                        return false
+                    }
+                    if(typeof this.nilai != 'object') {
+                        return false
+                    }
+                    if(this.nilai.tugas1==null||this.nilai.tugas2==null||this.nilai.tugas_final==null) {
+                        return false
+                    }
+                    return true
+                }catch(err) {
                     return false
                 }
-                if(typeof this.nilai != 'object') {
-                    return false
-                }
-                if(this.nilai.tugas1==null||this.nilai.tugas2==null||this.nilai.tugas_final==null) {
-                    return false
-                }
-                return true
             }
         }
     }

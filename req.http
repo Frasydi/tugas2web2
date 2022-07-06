@@ -44,16 +44,15 @@ Content-Type: application/json
 
 {
     "nama" : "Fachri",
-    "nim" : "105841106320",
+    "nim" : "105841106220",
     "jurusan" : "Informatika",
     "alamat" : "BTN",
     "kelas" : "4B",
     "kelompok" : "4",
     "nilai" : {
         "tugas1" : "90",
-        "tugas2" : "100",
-        "tugas_final" : "100"
+        "tugas2" : "100"
     }
-    
+
 }
 
