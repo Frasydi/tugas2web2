@@ -151,7 +151,7 @@ const paths = pathname.slice(1).split('/')
             </body>
             `)
         } else if(paths[0] == "web" && paths[1] == "edit") {
-            const nim = paths[1]
+            const nim = paths[2]
             if(nim == null || typeof nim != 'string' || nim == "") {
                 res.writeHead(400, {
                     'Content-Type' : 'text/html'
@@ -163,6 +163,7 @@ const paths = pathname.slice(1).split('/')
                 return
             }
             mahasiswa.getNIM(nim).then(data => {
+                console.log(nim)
             if(data.status >= 400) {
                 res.writeHead(data.status, {
                     'Content-Type' : 'text/html'
@@ -261,7 +262,7 @@ const paths = pathname.slice(1).split('/')
             
         }else if(paths[0] == "web" && paths[1] == "mahasiswa2" ) {
         const nim = paths[2]
-
+        
         if(nim == null || nim == "" || typeof nim != 'string') {
             res.writeHead(400, {
                 'Content-Type' : 'text/html'
@@ -269,6 +270,7 @@ const paths = pathname.slice(1).split('/')
             res.end(`<h1>NIM is not valid or empty</h1>`)
             return
         } 
+
         mahasiswa.getNIM(nim).then(result => {
             if(result.status >= 400) {
                 res.writeHead(result.status, {
@@ -729,7 +731,9 @@ const paths = pathname.slice(1).split('/')
             
         } else {
             res.writeHead(404, {
-                'Content-Type' : 'text/html'
+                'Content-Type' : 'text/html',
+                'Access-Control-Allow-Origin' : '*'
+
             })
             res.end(`NOT FOUND`)
         } 
@@ -740,7 +744,8 @@ const paths = pathname.slice(1).split('/')
         })
         if(req.headers.authorization != process.env.PASSWORD) {
             res.writeHead(401, {
-                'Content-Type' : 'text/plain'
+                'Content-Type' : 'text/plain',
+                'Access-Control-Allow-Origin' : '*'
             })
             res.end(`Not Auth`)
             return
@@ -796,7 +801,9 @@ const paths = pathname.slice(1).split('/')
     else {
         
         res.writeHead(400, {
-            'Content-Type' : 'text/plain'
+            'Content-Type' : 'text/plain',
+            'Access-Control-Allow-Origin' : '*'
+
         })
         res.end(`Cant Find that url with that method`)
     }
