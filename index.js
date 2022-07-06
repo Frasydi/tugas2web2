@@ -44,7 +44,7 @@ const paths = pathname.slice(1).split('/')
                     'Content-Type' : 'text/html'
                 })
                 let hasil =""
-                data.forEach(el => {
+                data.res.forEach(el => {
                     hasil += `<li>${el.nama}</li>`
                 })
                 res.end(`
