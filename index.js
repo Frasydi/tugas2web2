@@ -98,6 +98,7 @@ const paths = pathname.slice(1).split('/')
         
         </div>
             <script>
+            const app= document.querySelector(".app")
             const form = document.querySelector("form")
             form.addEventListener('submit', (el) => {
                 el.preventDefault()
