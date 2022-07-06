@@ -129,7 +129,6 @@ const paths = pathname.slice(1).split('/')
                             return
                         }
                         app.innerHTML = "<h1>Berhasil ditambahkan</h1>"
-                        console.log(await res.json())
                     }
                 ).catch(err => {
                     console.log(err)
