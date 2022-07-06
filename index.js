@@ -102,7 +102,7 @@ const paths = pathname.slice(1).split('/')
             const form = document.querySelector("form")
             form.addEventListener('submit', (el) => {
                 el.preventDefault()
-                console.log(el.target[0])
+                app.innerHtml = "<h1>Menunggu</h1>"
                 const mahasiswa = {
                     nama : el.target[0].value,
                     nim : el.target[1].value,
