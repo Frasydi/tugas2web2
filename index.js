@@ -49,6 +49,8 @@ const paths = pathname.slice(1).split('/')
                 })
                 res.end(`
                 <body>
+                <a href="/web/add">Ke menu tambahkan</a>
+                <h1>List mahasiswa</h1>
                 <ol>
                     ${hasil}
                 </ol>   
@@ -63,7 +65,46 @@ const paths = pathname.slice(1).split('/')
                 })
                 res.end(`<h1>500 Internal Server Error</h1>`)
             })
-        } else if(pathname == "/web") {
+        } else if(pathname == "/web/add") {
+            res.writeHead(200, {
+                'Content-Type' : "text/html"
+            })
+            res.end(`
+            <body>
+                <h1>Tambahkan Siswa</h1>
+        <form>
+            <label for="nama">Nama : </label>
+            <input type="text" id="nama">
+            <label for="nim">nim : </label>
+            <input type="text" id="nim">
+            <label for="alamat">alamat : </label>
+            <input type="text" id="alamat">
+            <label for="kelompok">kelompok : </label>
+            <input type="text" id="kelompok">
+            <label for="kelas">kelas : </label>
+            <input type="text" id="kelas">
+            <p>Tugas : </p>
+            <label for="jurusan">jurusan : </label>
+            <input type="text" id="jurusan">
+            <p>Tugas : </p>
+            <label for="tugas1"> Tugas1 : </label>
+            <input type="number" min=0 max=100 id="tugas1">
+            <label for="tugas2"> Tugas2 : </label>
+            <input type="number" min=0 max=100 id="tugas2">
+            <label for="tugas_final"> Tugas Final : </label>
+            <input type="number" min=0 max=100 id="tugas_final">
+        </form>
+            <script>
+            const form = document.querySelector("form")
+            form.addEventListener('submit', (el) => {
+                console.log(el.target)
+            })
+            </script>
+            </body>
+            `)
+        }
+        
+        else if(pathname == "/web") {
             res.writeHead(200, {
                 'Content-Type' : 'text/html'
             })
