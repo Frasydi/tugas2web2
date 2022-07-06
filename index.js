@@ -92,10 +92,15 @@ const paths = pathname.slice(1).split('/')
             <input type="number" min=0 max=100 id="tugas2"><br>
             <label for="tugas_final"> Tugas Final : </label>
             <input type="number" min=0 max=100 id="tugas_final">
+            <button type="submit"></button>
         </form>
+        <div class="app">
+        
+        </div>
             <script>
             const form = document.querySelector("form")
             form.addEventListener('submit', (el) => {
+                el.preventDefault()
                 console.log(el.target)
             })
             </script>
