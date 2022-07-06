@@ -1,6 +1,14 @@
 const mongoose = require('mongoose')
 const uri = process.env.DATABASE_Mahasiswa2
-const mongo2 = new mongoose.createConnection(uri)
+const mongo2 = mongoose.createConnection(uri, {
+}, (err, res) => {
+    try {
+      if(err) throw err  
+      console.log("Connected")
+    }catch(err) {   
+        console.log("not connected")
+    }
+})
 
 
 const mahasiswaSchema = new mongoose.Schema({
@@ -11,6 +19,20 @@ const mahasiswaSchema = new mongoose.Schema({
     nim : {
         type : String,
         required :true,
+        validate : {
+            validator : function() {
+                try {
+                    if(this.nim.length < 12) {
+                        return false
+                    }
+                    return true
+                }catch(err) {
+                    console.log(err)
+                    return false
+
+                }
+            }
+        }
         
     },
     jurusan : {
@@ -60,22 +82,29 @@ const mahasiswaSchema = new mongoose.Schema({
 
 const MahasiswaModel = mongo2.model("mahasiswa2", mahasiswaSchema, "mahasiswa")
 
-async function getAll() {
-    console.log("Get All")
-    
-    try {
-        
-       const mahasiswa = await MahasiswaModel.find({}).sort({nama:1})
-       return {res:mahasiswa,status:200}
-    } finally {
+async function getAll() {   
+    console.log(mongo2.readyState)
+    if( mongo2.readyState != 1) {
+        return {
+            status : 500,
+            res : "MONGODB IS NOT CONNECTED"
+        }
     }
+    const mahasiswa = await MahasiswaModel.find({}).sort({nama:1})
+    return {res:mahasiswa,status:200}
+    
 }
 
 async function getNIM(nim) {
-    try {
+    if( mongo2.readyState != 1) {
+        return {
+            status : 500,
+            res : "MONGODB IS NOT CONNECTED"
+        }
+    }
         const mahasiswa = await MahasiswaModel.findOne({nim:nim})
         
-        if(Object.keys(mahasiswa).length == 0) {
+        if(mahasiswa == null) {
             return {
                 status : 404,
                 res : "NOT FOUND NIM"
@@ -83,16 +112,20 @@ async function getNIM(nim) {
         }
         return {
             status : 200,
-            res : "NOT FOUND"
+            res : mahasiswa
         }
 
-    } finally {
-        mongoose.disconnect()
-    }
+    
 }
 
 async function addMahasiswa(mahasiswa) {
-    try {   
+    
+    if( mongo2.readyState != 1) {
+        return {
+            status : 500,
+            res : "MONGODB IS NOT CONNECTED"
+        }
+    }
         if(mahasiswa == null ||mahasiswa == undefined) {
             return {
                 status : 400,
@@ -128,11 +161,74 @@ async function addMahasiswa(mahasiswa) {
         res : "Success added"
     }
     
-    } finally {
+    
+
+
+}
+async function delMah(nim) {
+    console.log(mongo2.readyState)
+    if( mongo2.readyState != 1) {
+        return {
+            status : 500,
+            res : "MONGODB IS NOT CONNECTED"
+        }
+    }
+    console.log(nim)
+    const result = await MahasiswaModel.deleteOne({nim:nim})
+    console.log(result)
+    if(result.deletedCount <= 0) {
+        return {
+            status : 404,
+            res : "NOT FOUND"
+        }
+    }
+    return {
+        status : 200,
+        res : "Succesful"
+    }
+}
+
+async function editMah(nim, mahasiswa) {
+    
+    if( mongo2.readyState != 1) {
+        return {
+            status : 500,
+            res : "MONGODB IS NOT CONNECTED"
+        }
+    }
+        if(mahasiswa == null ||mahasiswa == undefined) {
+            return {
+                status : 400,
+            res : "mahasiswa is empty"
+        }
+         }
+    if(Object.keys(mahasiswa).length == 0) {
+        return {
+            status : 400,
+            res : "MAHASISWA IS NOT INSERTED"
+        }
+    }
+    try {
+        const result = await MahasiswaModel.findOneAndReplace({nim:nim}, mahasiswa, {upsert: true, runValidators : true})
+        console.log(result)
+        if(result == null) {
+            return {
+                status : 404,
+                res : "NOT FOUND"
+            }
+        }
+        return {
+            status : 200,
+            res : "Success"
+        }
+    }catch(err) {
+        console.log(err)
+        return {
+            status : 400, 
+            res : "DATA IS NOT VALID"
+        }
     }
 
 
 }
-
-
-module.exports = {getAll, getNIM, addMahasiswa}
+module.exports = {getAll, getNIM, addMahasiswa, delMah, editMah}

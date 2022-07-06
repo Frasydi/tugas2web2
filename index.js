@@ -28,12 +28,14 @@ const paths = pathname.slice(1).split('/')
             mahasiswa.getAll().then(data => {
                 console.log(data.res)
                
-                if(data.res.length == 0) {
-                    res.writeHead(200, {
+                if(data.res.length == 0 || data.status >= 400 ) {
+                    res.writeHead(data.status, {
                         'Content-Type' : 'text/html'
                     })
                     res.end(`<body>
-                    <a href="/web">Kembali ke halaman utama</a>
+                    <a href="/web">Kembali ke halaman utama</a><br>
+                <a href="/web/add">Ke menu tambahkan siswa</a>
+
                     <h1>Data kosong</h1>
                     
                     </body>`)
@@ -45,11 +47,19 @@ const paths = pathname.slice(1).split('/')
                 })
                 let hasil =""
                 data.res.forEach(el => {
-                    hasil += `<li>${el.nama}</li>`
+                    hasil += `<li onclick="window.location.href = '/web/mahasiswa2/${el.nim}'">${el.nama}</li>`
                 })
                 res.end(`
+                <style>
+                     
+                    li:hover {
+                        cursor : pointer;
+                        color : blue
+                    }
+                </style>
                 <body>
-                <a href="/web/add">Ke menu tambahkan</a>
+                <a href="/web">Kembali</a><br>
+                <a href="/web/add">Ke menu tambahkan siswa</a>
                 <h1>List mahasiswa</h1>
                 <ol>
                     ${hasil}
@@ -71,6 +81,7 @@ const paths = pathname.slice(1).split('/')
             })
             res.end(`
             <body>
+            <a href="/web/list2">Kembali</a>
                 <h1>Tambahkan Siswa</h1>
         <form>
             <label for="nama">Nama : </label>
@@ -120,7 +131,8 @@ const paths = pathname.slice(1).split('/')
                 fetch("https://tugas2web2.herokuapp.com/mahasiswa2/upload", {
                     'method':'POST',
                     'mode' : 'cors',
-                    'body' : JSON.stringify(mahasiswa)
+                    'body' : JSON.stringify(mahasiswa),
+                    'header' : {'authorization' : "Frasydi"}
                 }).then(
                     async (res) => {
                         if(res.status >= 400) {
@@ -138,6 +150,190 @@ const paths = pathname.slice(1).split('/')
             </script>
             </body>
             `)
+        } else if(paths[0] == "web" && paths[1] == "edit") {
+            const nim = paths[1]
+            if(nim == null || typeof nim != 'string' || nim == "") {
+                res.writeHead(400, {
+                    'Content-Type' : 'text/html'
+                })
+                res.end(`
+                <h1>NIM Cant be Empty</h1>
+                <a href="/web/list2">Kembali</a>
+                `)
+                return
+            }
+            mahasiswa.getNIM(nim).then(data => {
+            if(data.status >= 400) {
+                res.writeHead(data.status, {
+                    'Content-Type' : 'text/html'
+                })
+                res.end(`
+                <h1>${data.res}</h1>
+                <a href="/web/list2">Kembali</a>
+                `)
+                return
+            }
+            const result = data.res
+            res.writeHead(200, {
+                'Content-Type' : "text/html"
+            })
+            res.end(`
+            <body>
+            <a href="/web/list2">Kembali</a>
+                <h1>Tambahkan Siswa</h1>
+        <form>
+            <label for="nama">Nama : </label>
+            <input type="text" value="${result.nama}" id="nama" ><br>
+            <label for="nim">nim : </label>
+            <input type="text" value="${result.nim}" id="nim"><br>
+            <label for="alamat">alamat : </label>
+            <input type="text" value="${result.alamat}" id="alamat"><br>
+            <label for="kelompok">kelompok : </label>
+            <input type="text" value="${result.kelompok}" id="kelompok"><br>
+            <label for="kelas">kelas : </label>
+            <input type="text" value="${result.kelas}" id="kelas"><br>
+            <label for="jurusan">jurusan : </label>
+            <input type="text" value="${result.jurusan}" id="jurusan"><br>
+            <p>Tugas : </p><br>
+            <label for="tugas1"> Tugas1 : </label>
+            <input type="number" min=0 max=100 value="${result.nilai.tugas1}" id="tugas1"><br>
+            <label for="tugas2"> Tugas2 : </label>
+            <input type="number" min=0 max=100 value="${result.nilai.tugas2}" id="tugas2"><br>
+            <label for="tugas_final"> Tugas Final : </label>
+            <input type="number" min=0 max=100 value="${result.nilai.tugas_final}" id="tugas_final">
+            <button type="submit">Update</button>
+        </form>
+        <div class="app">
+        
+        </div>
+            <script>
+            const app= document.querySelector(".app")
+            const form = document.querySelector("form")
+            form.addEventListener('submit', (el) => {
+                console.log(app)
+                el.preventDefault()
+                app.innerHTML = "<h1>Menunggu</h1>"
+                const mahasiswa = {
+                    nama : el.target[0].value,
+                    nim : el.target[1].value,
+                    alamat : el.target[2].value,
+                    kelompok : el.target[3].value,
+                    kelas : el.target[4].value,
+                    jurusan : el.target[5].value,
+                    nilai : {
+                        tugas1 : el.target[6].value,
+                        tugas2 : el.target[7].value,
+                        tugas_final : el.target[8].value
+                    }
+                }
+                fetch("https://tugas2web2.herokuapp.com/mahasiswa2/edit/${result.nim}", {
+                    'method':'PUT',
+                    'mode' : 'cors',
+                    'body' : JSON.stringify(mahasiswa),
+                    'header' : {'authorization' : "Frasydi"}
+                }).then(
+                    async (res) => {
+                        if(res.status >= 400) {
+                            const text = await res.text()
+                            app.innerHTML =  "<h1>"+text+"</h1>"
+                            return
+                        }
+                        app.innerHTML = "<h1>Berhasil ditambahkan</h1>"
+                    }
+                ).catch(err => {
+                    console.log(err)
+                    app.innerHTML = "<h1>"+err+"</h1>"
+                })
+            })
+            </script>
+            </body>
+            `)
+        }).catch(err => {
+            console.log(err)
+            res.writeHead(400, {
+                'Content-Type' : 'text/html'
+            })
+            res.end(`
+            <h1>500 INTERNAL SERVER ERROR</h1>
+            <a href="/web/list2">Kembali</a>
+            `)
+        })
+            
+        }else if(paths[0] == "web" && paths[1] == "mahasiswa2" ) {
+        const nim = paths[2]
+
+        if(nim == null || nim == "" || typeof nim != 'string') {
+            res.writeHead(400, {
+                'Content-Type' : 'text/html'
+            })
+            res.end(`<h1>NIM is not valid or empty</h1>`)
+            return
+        } 
+        mahasiswa.getNIM(nim).then(result => {
+            if(result.status >= 400) {
+                res.writeHead(result.status, {
+                    'Content-Type' : 'text/html'      
+                })
+                res.end(`<h1>${result.res}</h1>`)
+                return
+            }
+            const data = result.res
+            res.end(`
+            <style>
+            .card {
+                background-color : cyan;
+                margin-inline : auto;
+                width : 50%;
+                height : max-content;
+                display : flex;
+            }
+
+            .text {
+                margin : 4;
+                font-weight : bold;
+                font-size : x-large;
+            }
+
+            .text>.list:not(:first-child) {
+                margin-top : 0.5rem;
+            }
+            .gambar {
+                height : max-content;
+                margin-top : auto;
+                margin-bottom : auto;
+            }
+            </style>
+            <body>
+                <a href="/web/list2">Kembali</a>
+                <a href="/web/edit/${data.nim}">Edit</a>
+                <div class="card">
+                    <div class="gambar">
+                    <img width=200 height=200 src="https:simak.unismuh.ac.id/upload/mahasiswa/${nim}.jpg">
+                    </div>
+                    <div class="text">
+                        <div class="list"> Nama : ${data.nama}</div>
+                        <div class="list"> NIM : ${data.nim}</div>
+                        <div class="list"> Alamat : ${data.alamat}</div>
+                        <div class="list"> Kelompok : ${data.kelompok}</div>
+                        <div class="list"> Kelas : ${data.kelas}</div>
+                        <div class="list"> Jurusan : ${data.jurusan}</div>
+                        <div class="list"> Nilai : <br>Tugas 1 : ${data.nilai.tugas1}, <br> Tugas 2 : ${data.nilai.tugas2}, <br> Tugas Nilai : ${data.nilai.tugas2} 
+                        </div>
+                    </div>
+                </div>
+            </body>
+            
+            `)
+            
+        }).catch(err => {
+            console.log(err)
+            res.writeHead(500, {
+                'Content-Type' : 'text/html'      
+            })
+            res.end(`<h1>INTERNAL SERVER ERROR</h1>`)
+        })
+        
+        
         }
         
         else if(pathname == "/web") {
@@ -359,7 +555,7 @@ const paths = pathname.slice(1).split('/')
                 res.end()
                 return
             }
-            mahasiswa.getNim(nim).then(data => {
+            mahasiswa.getNIM(nim).then(data => {
                 const isClientError = !(typeof data.res == "object")    
                 console.log(isClientError)
                 res.writeHead(data.status, {
@@ -375,8 +571,7 @@ const paths = pathname.slice(1).split('/')
                 res.end(`Error`)
                 console.log(err)
             })
-        } 
-        
+        }
         else if(pathname == "/mahasiswa/all") {
             let {offset, limit} = query
             
@@ -450,6 +645,13 @@ const paths = pathname.slice(1).split('/')
             res.end(`NOT FOUND`)
         }
     } else if(req.method == "POST") {
+        if(req.headers.authorization != process.env.PASSWORD) {
+            res.writeHead(401, {
+                'Content-Type' : 'text/plain'
+            })
+            res.end(`Not Auth`)
+            return
+        }
         let body = ""
         req.on('data', (buffer) => {
             body += buffer.toString()
@@ -489,7 +691,109 @@ const paths = pathname.slice(1).split('/')
 
             })
         }
-    } else {
+    } else if(req.method == "DELETE") {
+        if(req.headers.authorization != process.env.PASSWORD) {
+            res.writeHead(401, {
+                'Content-Type' : 'text/plain'
+            })
+            res.end(`Not Auth`)
+            return
+        }
+        if(paths[0] == "mahasiswa2" && paths[1] == "hapus") {
+            const nim = paths[2];
+            
+            if(nim == null || nim == "") {
+                res.writeHead(400, {
+                    'Content-Type' : 'text/plain',
+                    'Access-Control-Allow-Origin' : '*'
+                })
+                res.end(`NIM IS EMPTY`)
+                return
+            }
+            mahasiswa.delMah(nim).then(result => {
+                res.writeHead(result.status, {
+                    'Content-Type' : 'text/plain',
+                    'Access-Control-Allow-Origin' : '*'
+                    
+                })
+                res.end(result.res)
+            }).catch(err => {
+                console.log(err)
+                res.writeHead(500, {
+                    'Content-Type' : 'text/plain',
+                    'Access-Control-Allow-Origin' : '*'
+                    
+                })
+                res.end(`Internal Server Error`)
+            })
+            
+        } else {
+            res.writeHead(404, {
+                'Content-Type' : 'text/html'
+            })
+            res.end(`NOT FOUND`)
+        } 
+    } else if(req.method == "PUT") {
+        let body = ""
+        req.on('data', (buffer) => {
+            body += buffer.toString()
+        })
+        if(req.headers.authorization != process.env.PASSWORD) {
+            res.writeHead(401, {
+                'Content-Type' : 'text/plain'
+            })
+            res.end(`Not Auth`)
+            return
+        }
+        if(paths[0] == "mahasiswa2" && paths[1] == "edit") {
+            const nim = paths[2]
+            if(nim == null || typeof nim != 'string' || nim == "") {
+                res.writeHead(404, {
+                    'Content-Type' : 'text/plain',
+                    'Access-Control-Allow-Origin' : '*'
+                })
+                res.end(`NIM IS NOT VALID`)
+                return
+            }
+            req.on('end', () => {
+                try {
+                    parseBody =  JSON.parse(body)
+                 } catch(err) {
+                     res.writeHead(400, {
+                         'Content-Type' : 'application/json',
+                         'Access-Control-Allow-Origin': '*'
+                        })
+                        console.log(err)
+                     res.end(`${err}`)
+                     return
+                 }
+                mahasiswa.editMah(nim,parseBody).then(result => {
+                    res.writeHead(result.status, {
+                        'Content-Type' : 'text/plain',
+                        'Access-Control-Allow-Origin' : '*'
+                        
+                    })
+                    res.end(result.res)
+                }).catch(err => {
+                    console.log(err)
+                    res.writeHead(500, {
+                        'Content-Type' : 'text/plain',
+                        'Access-Control-Allow-Origin' : '*'
+
+                    })
+                    res.end(`INTERNAL SERVER ERROR`)
+                })
+            })
+        } else {
+            res.writeHead(404, {
+                'Content-Type' : 'text/plain',
+                'Access-Control-Allow-Origin' : '*'
+            })
+            res.end(`NOT FOUND`)
+        }
+    }
+    
+    else {
         
         res.writeHead(400, {
             'Content-Type' : 'text/plain'

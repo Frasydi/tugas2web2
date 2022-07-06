@@ -1,7 +1,14 @@
 const mongoose = require('mongoose')
 
 const uri = process.env.DATABASE_URL
-const mongo1 = new mongoose.createConnection(uri)
+const mongo1 = new mongoose.createConnection(uri, {}, (err, res) => {
+    try {
+        if(err) throw err
+        console.log("Success")
+    } catch(err) {
+        console.log(err)
+    }
+}) 
 
 
 const mongoSchema = new mongoose.Schema({
@@ -71,8 +78,13 @@ const postgredb = {
 }
 const mongodbs = {
     async getAll(offset, limit) {
-        try {
-        
+        console.log(mongo1.readyState)
+        if(mongo1.readyState != 1) {
+            return {
+                status : 500,
+                res : "MONGODB IS NOT CONNECTED"
+            }
+        }
             console.log(limit)
             limit = limit == null || limit < 0 ? parseInt(Number.MAX_SAFE_INTEGER.toFixed()) : parseInt(limit)
             offset = offset == null ? 0 : parseInt(offset)
@@ -82,12 +94,15 @@ const mongodbs = {
                 status : 200,
                 res : mahasiswa
             }
-        }finally {
-        }
+        
     },
     async getNim(nim){
-        try {
-            
+            if(mongo1.readyState != 1) {
+                return {
+                    status : 500,
+                    res : "MONGODB IS NOT CONNECTED"
+                }
+            }
             if(nim == null) {
                 return {
                     status : 400,
@@ -105,9 +120,7 @@ const mongodbs = {
                 status : 200,
                 res : result
             }
-        }finally {
-
-        }
+        
     }
 }
 

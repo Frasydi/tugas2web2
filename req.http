@@ -6,10 +6,35 @@ GET http://localhost:3000/mahasiswa/all
 ###
 GET http://localhost:3000/mahasiswa2/all
 ###
-GET http://localhost:3000/mahasiswa/nim/105841106620
+GET http://localhost:3000/mahasiswa/nim/105841106320
+###
+GET http://localhost:3000/mahasiswa2/nim/105841106320
+###
+DELETE  http://localhost:3000/mahasiswa2/hapus/105841106320
+Authorization: Frasydi
+
+###
+PUT  http://localhost:3000/mahasiswa2/edit/105841106320
+Authorization: Frasydi
+
+{
+    "nama" : "Fachri Rasyidi",
+    "nim" : "105841106320",
+    "jurusan" : "Informatika",
+    "alamat" : "BTN",
+    "kelas" : "4B",
+    "kelompok" : "4",
+    "nilai" : {
+        "tugas1" : "90",
+        "tugas2" : "100",
+        "tugas_final" : "100"
+
+    }
+}
 ###
 POST http://localhost:3000/mahasiswa2/upload
 Content-Type: application/json
+Authorization: Frasydi
 
 {
     "nama" : "Fachri",
