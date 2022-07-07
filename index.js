@@ -311,6 +311,8 @@ const paths = pathname.slice(1).split('/')
             <body>
                 <a href="/web/list2">Kembali</a>
                 <a href="/web/edit/${data.nim}">Edit</a>
+                <button class="delete">Hapus</button>
+                
                 <div class="card">
                     <div class="gambar">
                     <img width=200 height=200 src="https://simak.unismuh.ac.id/upload/mahasiswa/${nim}.jpg">
@@ -325,7 +327,30 @@ const paths = pathname.slice(1).split('/')
                         <div class="list"> Nilai : <br>Tugas 1 : ${data.nilai.tugas1}, <br> Tugas 2 : ${data.nilai.tugas2}, <br> Tugas Nilai : ${data.nilai.tugas2} 
                         </div>
                     </div>
-                </div>
+                    </div>
+                <script>
+                const deletes = document.querySelector(".delete")
+                deletes.addEventListener('click', deletess)
+                async function deletess() {
+                    fetch("https://tugas2web2.herokuapp.com/mahasiswa2/hapus/${data.nim}", {
+                        'headers' : {
+                            'authorization' : 'Frasydi'
+                        },
+                        'method' : 'DELETE',
+                        'mode' : 'cors' 
+                    }).then(async (res) => {
+                        if(res.status >= 400) {
+                            alert("There is error occured "+(await res.text()))
+                            return
+                        }
+                        alert((await res.text()))
+                        window.location.href = "/web/list2"
+                    }).catch(err => {
+                        console.log(err)
+                        alert(err)
+                    })
+                }
+                </script>
             </body>
             
             `)
