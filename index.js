@@ -8,8 +8,6 @@ const mahasiswa = require('./database2.js')
 const {capFirstLetter} = require("./functionJs.js")
 const bulan = ["Januari", "Februari", "Maret", "April","Mei","Juni", "Juli", "Agustus","September","Oktober", "November", "Desember" ]
 
-
-
 const server = HTTP.createServer(async (req,res) => {
 const urls = url.parse(req.url, true)
 const {query, pathname} = urls
@@ -22,7 +20,9 @@ const paths = pathname.slice(1).split('/')
             res.writeHead(200, {
                 'Content-Type' : "text/plain"
             })
-            res.write('Hello World😆')
+            res.write(`Hello World😆
+            ${req.url}
+            `)
             res.end()
         } else if(pathname == "/web/list2") {
             mahasiswa.getAll().then(data => {
@@ -348,7 +348,8 @@ const paths = pathname.slice(1).split('/')
             res.write(`
            
             <h1 align="center"> Selamat Datang di kelompok 4 web Programming </h1>
-            <p align="center">Tekan <a href="/web/list?page=1&database=mongo">ini</a> untuk masuk ke dalam data kelompok</p>
+            <p align="center">Tekan <a href="/web/list?page=1&database=mongo">ini</a> untuk masuk ke dalam data mahasiswa</p>
+            <p align="center">Tekan <a href="/web/list2">ini</a> untuk masuk ke dalam data kelompok</p>
             `)
             res.end()
         }else if(pathname == "/web/list") {
