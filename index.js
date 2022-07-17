@@ -151,7 +151,7 @@ const paths = pathname.slice(1).split('/')
             </script>
             </body>
             `)
-        } else if(paths[0] == "web" && paths[1] == "edit") {
+        } else if(paths[0] == "web" && paths[1] == "input") {
             const nim = paths[2]
             if(nim == null || typeof nim != 'string' || nim == "") {
                 res.writeHead(400, {
@@ -405,6 +405,7 @@ const paths = pathname.slice(1).split('/')
             <body>
                 <a href="/web/list2">Kembali</a>
                 <a href="/web/edit/${data.nim}">Edit</a>
+                <a href="/web/input/${data.nim}">Edit</a>
                 
                 <div class="card">
                     <div class="gambar">
