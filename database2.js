@@ -182,4 +182,4 @@ async function editMah(nim, mahasiswa) {
 
 
 }
-module.exports = {getAll, getNIM, addMahasiswa, delMah, editMah}
+module.exports = {getAll, getNIM, delMah, editMah}
