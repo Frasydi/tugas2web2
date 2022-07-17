@@ -179,6 +179,13 @@ const paths = pathname.slice(1).split('/')
             res.writeHead(200, {
                 'Content-Type' : "text/html"
             })
+            if(result.nilai == null) {
+                result['nilai'] = {
+                    tugas1:0,
+                    tugas2:0,
+                    tugas_final:0
+                }
+            }
             res.end(`
             <body>
             <a href="/web/list2">Kembali</a>
@@ -188,21 +195,6 @@ const paths = pathname.slice(1).split('/')
             <input type="text" value="${result.nama}" id="nama" ><br>
             <label for="nim">nim : </label>
             <input type="text" value="${result.nim}" id="nim"><br>
-            <label for="alamat">alamat : </label>
-            <input type="text" value="${result.alamat}" id="alamat"><br>
-            <label for="kelompok">kelompok : </label>
-            <input type="text" value="${result.kelompok}" id="kelompok"><br>
-            <label for="kelas">kelas : </label>
-            <input type="text" value="${result.kelas}" id="kelas"><br>
-            <label for="jurusan">jurusan : </label>
-            <input type="text" value="${result.jurusan}" id="jurusan"><br>
-            <p>Tugas : </p><br>
-            <label for="tugas1"> Tugas1 : </label>
-            <input type="number" min=0 max=100 value="${result.nilai.tugas1}" id="tugas1"><br>
-            <label for="tugas2"> Tugas2 : </label>
-            <input type="number" min=0 max=100 value="${result.nilai.tugas2}" id="tugas2"><br>
-            <label for="tugas_final"> Tugas Final : </label>
-            <input type="number" min=0 max=100 value="${result.nilai.tugas_final}" id="tugas_final">
             <button type="submit">Update</button>
         </form>
         <div class="app">
@@ -218,15 +210,7 @@ const paths = pathname.slice(1).split('/')
                 const mahasiswa = {
                     nama : el.target[0].value,
                     nim : el.target[1].value,
-                    alamat : el.target[2].value,
-                    kelompok : el.target[3].value,
-                    kelas : el.target[4].value,
-                    jurusan : el.target[5].value,
-                    nilai : {
-                        tugas1 : el.target[6].value,
-                        tugas2 : el.target[7].value,
-                        tugas_final : el.target[8].value
-                    }
+                    
                 }
                 fetch("https://tugas2web2.herokuapp.com/mahasiswa2/edit/${result.nim}", {
                     'method':'PUT',
@@ -283,6 +267,13 @@ const paths = pathname.slice(1).split('/')
                 return
             }
             const data = result.res
+            if(data.nilai == null) {
+                data["nilai"] = {
+                    tugas1 : 0,
+                    tugas2 : 0,
+                    tugas_final : 0
+                }
+            }
             res.end(`
             <style>
             .card {
@@ -311,7 +302,6 @@ const paths = pathname.slice(1).split('/')
             <body>
                 <a href="/web/list2">Kembali</a>
                 <a href="/web/edit/${data.nim}">Edit</a>
-                <button class="delete">Hapus</button>
                 
                 <div class="card">
                     <div class="gambar">
@@ -321,35 +311,14 @@ const paths = pathname.slice(1).split('/')
                         <div class="list"> Nama : ${data.nama}</div>
                         <div class="list"> NIM : ${data.nim}</div>
                         <div class="list"> Alamat : ${data.alamat}</div>
-                        <div class="list"> Kelompok : ${data.kelompok}</div>
-                        <div class="list"> Kelas : ${data.kelas}</div>
-                        <div class="list"> Jurusan : ${data.jurusan}</div>
-                        <div class="list"> Nilai : <br>Tugas 1 : ${data.nilai.tugas1}, <br> Tugas 2 : ${data.nilai.tugas2}, <br> Tugas Nilai : ${data.nilai.tugas2} 
+                        <div class="list"> Nilai : <br>Tugas 1 : ${data.nilai.tugas1}, <br> Tugas 2 : ${data.nilai.tugas2}, <br> Tugas Final : ${data.nilai.tugas_final} 
                         </div>
                     </div>
                     </div>
                 <script>
                 const deletes = document.querySelector(".delete")
                 deletes.addEventListener('click', deletess)
-                async function deletess() {
-                    fetch("https://tugas2web2.herokuapp.com/mahasiswa2/hapus/${data.nim}", {
-                        'headers' : {
-                            'authorization' : 'Frasydi'
-                        },
-                        'method' : 'DELETE',
-                        'mode' : 'cors' 
-                    }).then(async (res) => {
-                        if(res.status >= 400) {
-                            alert("There is error occured "+(await res.text()))
-                            return
-                        }
-                        alert((await res.text()))
-                        window.location.href = "/web/list2"
-                    }).catch(err => {
-                        console.log(err)
-                        alert(err)
-                    })
-                }
+                
                 </script>
             </body>
             

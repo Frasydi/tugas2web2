@@ -35,25 +35,16 @@ const mahasiswaSchema = new mongoose.Schema({
         }
         
     },
-    jurusan : {
-        type : String,
-        required : true,
-    },
+    
     alamat : {
         type : String,
         required : true,
     },
-    kelas : {
-        type : String,
-        required : true,
-    },
-    kelompok : {
-        type : String,
-        required : true,
-    },
+    
+    
     nilai : {
         type : Object,
-        required : true,
+        required : false,
         validate : {
             validator : function() {
                 try {
@@ -209,7 +200,7 @@ async function editMah(nim, mahasiswa) {
         }
     }
     try {
-        const result = await MahasiswaModel.findOneAndReplace({nim:nim}, mahasiswa, {upsert: true, runValidators : true})
+        const result = await MahasiswaModel.findOneAndUpdate({nim:nim}, mahasiswa, {upsert: true, runValidators : true, new : true})
         console.log(result)
         if(result == null) {
             return {
