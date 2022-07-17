@@ -191,6 +191,108 @@ const paths = pathname.slice(1).split('/')
             <a href="/web/list2">Kembali</a>
                 <h1>Tambahkan Siswa</h1>
         <form>
+            <label for="tugas1">Tugas 1 : </label>
+            <input type="text" value="${result.nilai.tugas1}" id="tugas1" required><br>
+            <label for="tugas2">Tugas 2 : </label>
+            <input type="text" value="${result.nilai.tugas2}" id="tugas2" required><br>
+            <label for="tugasfinal">Tugas Final : </label>
+            <input type="text" value="${result.nilai.tugas_final}" id="tugasfinal" required><br>
+            <button type="submit">Update</button>
+        </form>
+
+        <div class="app">
+        </div>
+            <script>
+            const app= document.querySelector(".app")
+            const form = document.querySelector("form")
+            form.addEventListener('submit', (el) => {
+                console.log(app)
+                el.preventDefault()
+                app.innerHTML = "<h1>Menunggu</h1>"
+                const mahasiswa = {
+                    nilai : {
+                        tugas1 : el.target[0].value
+                        tugas2 : el.target[1].value
+                        tugas_final : el.target[2].value
+                    }
+                    
+                }
+                fetch("https://tugas2web2.herokuapp.com/mahasiswa2/edit/${result.nim}", {
+                    'method':'PUT',
+                    'mode' : 'cors',
+                    'body' : JSON.stringify(mahasiswa),
+                    'headers' : {'authorization' : "Frasydi"}
+                }).then(
+                    async (res) => {
+                        if(res.status >= 400) {
+                            const text = await res.text()
+                            app.innerHTML =  "<h1>"+text+"</h1>"
+                            return
+                        }
+                        app.innerHTML = "<h1>Berhasil diupdate</h1>"
+                        window.location.href = "/web/list2"
+
+                    }
+                ).catch(err => {
+                    console.log(err)
+                    app.innerHTML = "<h1>"+err+"</h1>"
+                })
+            })
+            </script>
+            </body>
+            `)
+        }).catch(err => {
+            console.log(err)
+            res.writeHead(400, {
+                'Content-Type' : 'text/html'
+            })
+            res.end(`
+            <h1>500 INTERNAL SERVER ERROR</h1>
+            <a href="/web/list2">Kembali</a>
+            `)
+        })
+            
+        }
+        else if(paths[0] == "web" && paths[1] == "edit") {
+            const nim = paths[2]
+            if(nim == null || typeof nim != 'string' || nim == "") {
+                res.writeHead(400, {
+                    'Content-Type' : 'text/html'
+                })
+                res.end(`
+                <h1>NIM Cant be Empty</h1>
+                <a href="/web/list2">Kembali</a>
+                `)
+                return
+            }
+            mahasiswa.getNIM(nim).then(data => {
+                console.log(nim)
+            if(data.status >= 400) {
+                res.writeHead(data.status, {
+                    'Content-Type' : 'text/html'
+                })
+                res.end(`
+                <h1>${data.res}</h1>
+                <a href="/web/list2">Kembali</a>
+                `)
+                return
+            }
+            const result = data.res
+            res.writeHead(200, {
+                'Content-Type' : "text/html"
+            })
+            if(result.nilai == null) {
+                result['nilai'] = {
+                    tugas1:0,
+                    tugas2:0,
+                    tugas_final:0
+                }
+            }
+            res.end(`
+            <body>
+            <a href="/web/list2">Kembali</a>
+                <h1>Tambahkan Siswa</h1>
+        <form>
             <label for="nama">Nama : </label>
             <input type="text" value="${result.nama}" id="nama" ><br>
             <label for="nim">nim : </label>
@@ -247,7 +349,8 @@ const paths = pathname.slice(1).split('/')
             `)
         })
             
-        }else if(paths[0] == "web" && paths[1] == "mahasiswa2" ) {
+        }
+        else if(paths[0] == "web" && paths[1] == "mahasiswa2" ) {
         const nim = paths[2]
         
         if(nim == null || nim == "" || typeof nim != 'string') {
