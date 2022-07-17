@@ -109,53 +109,7 @@ async function getNIM(nim) {
     
 }
 
-async function addMahasiswa(mahasiswa) {
-    
-    if( mongo2.readyState != 1) {
-        return {
-            status : 500,
-            res : "MONGODB IS NOT CONNECTED"
-        }
-    }
-        if(mahasiswa == null ||mahasiswa == undefined) {
-            return {
-                status : 400,
-            res : "mahasiswa is empty"
-        }
-         }
-    if(Object.keys(mahasiswa).length == 0) {
-        return {
-            status : 400,
-            res : "MAHASISWA IS NOT INSERTED"
-        }
-    }
-    const mahasiswaBaru = new MahasiswaModel(mahasiswa)
-    if(await MahasiswaModel.exists({nim:mahasiswa.nim})) {
-        return {
-            status : 400,
-            res : "NIM ini sudah ditambahkan"
-        }
-    }
-    try {
-        await mahasiswaBaru.save()
-    }catch(err) {
-        console.log('Error')
-        console.log(err)
-        return {
-            status : 400,
-            res : "Data is not valid"
-        }
-    }
-        
-    return {
-        status : 201,
-        res : "Success added"
-    }
-    
-    
 
-
-}
 async function delMah(nim) {
     console.log(mongo2.readyState)
     if( mongo2.readyState != 1) {
@@ -187,31 +141,37 @@ async function editMah(nim, mahasiswa) {
             res : "MONGODB IS NOT CONNECTED"
         }
     }
-        if(mahasiswa == null ||mahasiswa == undefined) {
+
+    if(mahasiswa == null ||mahasiswa == undefined) {
             return {
                 status : 400,
             res : "mahasiswa is empty"
         }
-         }
+    }
+
     if(Object.keys(mahasiswa).length == 0) {
         return {
             status : 400,
             res : "MAHASISWA IS NOT INSERTED"
         }
     }
+
     try {
-        const result = await MahasiswaModel.findOneAndUpdate({nim:nim}, mahasiswa, {upsert: true, runValidators : true, new : true})
+        const result = await MahasiswaModel.findOneAndUpdate({nim:nim}, mahasiswa, {new : true})
         console.log(result)
+        
         if(result == null) {
             return {
                 status : 404,
                 res : "NOT FOUND"
             }
         }
+
         return {
             status : 200,
             res : "Success"
         }
+
     }catch(err) {
         console.log(err)
         return {
