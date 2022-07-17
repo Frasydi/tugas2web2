@@ -211,8 +211,8 @@ const paths = pathname.slice(1).split('/')
                 app.innerHTML = "<h1>Menunggu</h1>"
                 const mahasiswa = {
                     nilai : {
-                        tugas1 : el.target[0].value
-                        tugas2 : el.target[1].value
+                        tugas1 : el.target[0].value,
+                        tugas2 : el.target[1].value,
                         tugas_final : el.target[2].value
                     }
                     
@@ -405,7 +405,7 @@ const paths = pathname.slice(1).split('/')
             <body>
                 <a href="/web/list2">Kembali</a>
                 <a href="/web/edit/${data.nim}">Edit</a>
-                <a href="/web/input/${data.nim}">Edit</a>
+                <a href="/web/input/${data.nim}">Input</a>
                 
                 <div class="card">
                     <div class="gambar">
