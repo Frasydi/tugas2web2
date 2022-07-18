@@ -13,12 +13,10 @@ const mongo2 = mongoose.createConnection(uri, {
 
 const mahasiswaSchema = new mongoose.Schema({
     nama : {
-        type : String,
-        required : true,
+        type : String
     },
     nim : {
         type : String,
-        required :true,
         validate : {
             validator : function() {
                 try {
@@ -38,13 +36,16 @@ const mahasiswaSchema = new mongoose.Schema({
     
     alamat : {
         type : String,
-        required : true,
     },
-    
+    kelompok : {
+        type : Number
+    },
+    kelas : {
+        type : String
+    },
     
     nilai : {
         type : Object,
-        required : false,
         validate : {
             validator : function() {
                 try {
@@ -74,7 +75,6 @@ const mahasiswaSchema = new mongoose.Schema({
 const MahasiswaModel = mongo2.model("mahasiswa2", mahasiswaSchema, "mahasiswa")
 
 async function getAll() {   
-    console.log(mongo2.readyState)
     if( mongo2.readyState != 1) {
         return {
             status : 500,
@@ -83,7 +83,6 @@ async function getAll() {
     }
     const mahasiswa = await MahasiswaModel.find({}).sort({nama:1})
     return {res:mahasiswa,status:200}
-    
 }
 
 async function getNIM(nim) {
@@ -109,29 +108,6 @@ async function getNIM(nim) {
     
 }
 
-
-async function delMah(nim) {
-    console.log(mongo2.readyState)
-    if( mongo2.readyState != 1) {
-        return {
-            status : 500,
-            res : "MONGODB IS NOT CONNECTED"
-        }
-    }
-    console.log(nim)
-    const result = await MahasiswaModel.deleteOne({nim:nim})
-    console.log(result)
-    if(result.deletedCount <= 0) {
-        return {
-            status : 404,
-            res : "NOT FOUND"
-        }
-    }
-    return {
-        status : 200,
-        res : "Succesful"
-    }
-}
 
 async function editMah(nim, mahasiswa) {
     
@@ -182,4 +158,4 @@ async function editMah(nim, mahasiswa) {
 
 
 }
-module.exports = {getAll, getNIM, delMah, editMah}
+module.exports = {getAll, getNIM, editMah}

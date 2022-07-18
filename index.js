@@ -162,7 +162,7 @@ const paths = pathname.slice(1).split('/')
                 <a href="/web/list2">Kembali</a>
                 `)
                 return
-            }
+        }
             mahasiswa.getNIM(nim).then(data => {
                 console.log(nim)
             if(data.status >= 400) {
@@ -294,9 +294,14 @@ const paths = pathname.slice(1).split('/')
                 <h1>Tambahkan Siswa</h1>
         <form>
             <label for="nama">Nama : </label>
-            <input type="text" value="${result.nama}" id="nama" ><br>
+            <input type="text" value="${result.nama}" id="nama" required><br>
             <label for="nim">nim : </label>
-            <input type="text" value="${result.nim}" id="nim"><br>
+            <input type="text" value="${result.nim}" id="nim" required><br>
+            <label for="kelompok">kelompok : </label>
+            <input type="number" value="${result.kelompok == null?0:result.kelompok}" id="kelompok" required><br>
+            <label for="kelas">kelas : </label>
+            <input type="text" value="${result.kelas == null ? "" : result.kelompok}" id="kelas" required><br>
+            
             <button type="submit">Update</button>
         </form>
         <div class="app">
@@ -312,7 +317,8 @@ const paths = pathname.slice(1).split('/')
                 const mahasiswa = {
                     nama : el.target[0].value,
                     nim : el.target[1].value,
-                    
+                    kelompok: el.target[2].value,
+                    kelas: el.target[3].value
                 }
                 fetch("https://tugas2web2.herokuapp.com/mahasiswa2/edit/${result.nim}", {
                     'method':'PUT',
@@ -415,6 +421,8 @@ const paths = pathname.slice(1).split('/')
                         <div class="list"> Nama : ${data.nama}</div>
                         <div class="list"> NIM : ${data.nim}</div>
                         <div class="list"> Alamat : ${data.alamat}</div>
+                        <div class="list"> Kelompok : ${data.kelompok == null?"":data.kelompok}</div>
+                        <div class="list"> Kelas : ${data.kelas == null?"":data.kelompok}</div>
                         <div class="list"> Nilai : <br>Tugas 1 : ${data.nilai.tugas1}, <br> Tugas 2 : ${data.nilai.tugas2}, <br> Tugas Final : ${data.nilai.tugas_final} 
                         </div>
                     </div>
