@@ -421,8 +421,8 @@ const paths = pathname.slice(1).split('/')
                         <div class="list"> Nama : ${data.nama}</div>
                         <div class="list"> NIM : ${data.nim}</div>
                         <div class="list"> Alamat : ${data.alamat}</div>
-                        <div class="list"> Kelompok : ${data.kelompok == null?"":data.kelompok}</div>
-                        <div class="list"> Kelas : ${data.kelas == null?"":data.kelompok}</div>
+                        <div class="list"> Kelompok : ${data.kelompok == null?"belum diketahui":data.kelompok}</div>
+                        <div class="list"> Kelas : ${data.kelas == null?"belum diketahui":data.kelompok}</div>
                         <div class="list"> Nilai : <br>Tugas 1 : ${data.nilai.tugas1}, <br> Tugas 2 : ${data.nilai.tugas2}, <br> Tugas Final : ${data.nilai.tugas_final} 
                         </div>
                     </div>
